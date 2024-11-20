@@ -90,16 +90,34 @@ def generate_qr():
     try:
         data = request.get_json()
         idno = data.get('idno')
+        lastname = data.get('lastname')
+        firstname = data.get('firstname')
+        course = data.get('course')
+        level = data.get('level')
+
+        # Creating a string with more details to encode in the QR code
+        qr_data = {
+            'idno': idno,
+            'lastname': lastname,
+            'firstname': firstname,
+            'course': course,
+            'level': level
+        }
+        qr_data_str = str(qr_data)  
+
         qr_path = os.path.join('static/images/qrcode', f"{idno}.png")
+        
         qr = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=10, border=4)
-        qr.add_data(idno)
+        qr.add_data(qr_data_str)
         qr.make(fit=True)
         img = qr.make_image(fill='black', back_color='white')
         img.save(qr_path)
-        return jsonify({"qr_path": qr_path, "qr_data": idno})
+        
+        return jsonify({"qr_path": qr_path, "qr_data": qr_data_str})
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
 
 
 @app.route('/delete_qr', methods=['POST'])
@@ -156,17 +174,27 @@ def add_student():
                 with open(image_path, 'wb') as img_file:
                     img_file.write(base64.b64decode(image_data))
 
+            # Generate QR code with more detailed information
+            qr_data = {
+                'idno': idno,
+                'lastname': lastname,
+                'firstname': firstname,
+                'course': course,
+                'level': level
+            }
+            qr_data_str = str(qr_data)  # Convert to string or use json.dumps
+
             qr_path = os.path.join('static/images/qrcode', f"{idno}.png")
             if not os.path.exists(os.path.dirname(qr_path)):
                 os.makedirs(os.path.dirname(qr_path))
 
             qr = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=10, border=4)
-            qr.add_data(idno)
+            qr.add_data(qr_data_str)
             qr.make(fit=True)
             img = qr.make_image(fill='black', back_color='white')
-
             img.save(qr_path)
 
+            # Save student information
             success = add_record(
                 'students',
                 idno=idno,
@@ -189,23 +217,6 @@ def add_student():
             print(f"Exception: {e}")
 
     return render_template('addstudent.html', pagetitle=pagetitle, qr_path=qr_path)
-
-@app.route('/get_user/<idno>', methods=['GET'])
-def get_user_details(idno):
-    try:
-        user = get_user(idno)  # Fetch user from the database
-        if user:
-            return jsonify({
-                "idno": user['idno'],
-                "lastname": user['lastname'],
-                "firstname": user['firstname'],
-                "course": user['course'],
-                "level": user['level']
-            })
-        else:
-            return jsonify({"error": "User not found"}), 404
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
 
 
 @app.route('/delete_user', methods=['POST'])
