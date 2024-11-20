@@ -8,11 +8,11 @@ import os
 
 app = Flask(__name__)
 
-app.config["SESSION_TYPE"] = "filesystem"
-app.config["SESSION_PERMANENT"] = False
-app.config["SESSION_FILE_DIR"] = os.path.join(app.instance_path, 'sessions')
-app.config["SESSION_COOKIE_NAME"] = "session_cookie"
+app.config['SESSION_TYPE'] = 'filesystem'
+app.config['SESSION_PERMANENT'] = False
+app.config['SESSION_FILE_DIR'] = os.path.join(app.instance_path, 'sessions')
 app.config['SECRET_KEY'] = 'Kimperor123'
+
 
 Session(app)
 
@@ -50,12 +50,15 @@ def after_request(response):
     response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
     response.headers['Pragma'] = 'no-cache'
     response.headers['Expires'] = '-1'
-    if 'username' not in session:
+    
+    # Ensure session is initialized before checking for 'username'
+    if hasattr(session, 'username') and 'username' not in session:
         response.headers['Cache-Control'] = 'no-store'
         response.headers['Pragma'] = 'no-cache'
         response.headers['Expires'] = '-1'
 
     return response
+
 
 @app.route('/logout')
 def logout():
