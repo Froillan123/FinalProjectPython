@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class='w3-container w3-blue w3-margin-bottom header'>
+    <h3 class="w3-left w3-margin-left w3-margin-top">{{ pagetitle }}</h3>
+    <nav class="navbar">
+        <a href="/logout" class="w3-button w3-red w3-right w3-margin-top w3-margin-bottom" id="logout">
+            <i class="fa fa-sign-out-alt"></i> LOG-OUT
+        </a>
+        <a href="/addstudent" class="w3-right w3-button w3-margin-right w3-white w3-margin-top" id="add">
+            <i class="fa fa-plus"></i> Add Student
+        </a>
+    </nav>
+</div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+        <div class="w3-container flash-message 
+        {% if category == 'success' %}
+            success
+        {% elif category == 'error' %}
+            error
+        {% elif category == 'info' %}
+            info
+        {% elif category == 'delete-success' %}
+            delete-success
+        {% else %}
+            warning
+        {% endif %}
+        ">
+            {% if category == 'success' %}
+                <i class="fa fa-check-circle"></i>
+            {% elif category == 'error' %}
+                <i class="fa fa-times-circle"></i>
+            {% elif category == 'warning' %}
+                <i class="fa fa-exclamation-circle"></i>
+            {% elif category == 'delete-success' %}
+                <i class="fa fa-check-circle"></i>
+            {% elif category == 'info' %}
+                <i class="fa fa-info-circle"></i>
+            {% endif %}
+            <p>{{ message }}</p>
+        </div>
+        
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<div class="w3-row-padding" id="main_container">
+    <div class="w3-full">
+        <table class="w3-table-all styled-table" id="table">
+            <thead>
+                <tr id="tr1">
+                    <th class="w3-center">IDNO</th>
+                    <th class="w3-center">LASTNAME</th>
+                    <th class="w3-center">FIRSTNAME</th>
+                    <th class="w3-center">COURSE</th>
+                    <th class="w3-center">LEVEL</th>
+                    <th class="w3-center">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr id="tr2">
+                    <td class="w3-center" data-cell="IDNO:">
+                        <a>{{ user["idno"] }}</a>
+                    </td>
+                    <td class="w3-center" data-cell="LASTNAME:">{{ user["lastname"] }}</td>
+                    <td class="w3-center" data-cell="FIRSTNAME:">{{ user["firstname"] }}</td>
+                    <td class="w3-center" data-cell="COURSE:">{{ user["course"] }}</td>
+                    <td class="w3-center" data-cell="LEVEL:">{{ user["level"] }}</td>
+                    <td class="w3-center" data-cell="ACTION:">
+                        <button class="w3-button"></button>
+                        <button class="w3-button w3-red delete-btn delete" onclick="openCustomAlert('{{ user['idno'] }}')">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </td>
+
+                    <!-- for debugging for images and qr show -->
+                    <!-- <td>
+                        {% if user["image"] %}
+                            <img src="{{ user['image'] }}" alt="Profile Image" style="height: 60px;">
+                        {% else %}
+                            <img src="/static/images/default-image.png" alt="Default Image" style="height: 60px;">
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if user["qrcode"] %}
+                            <img src="{{ user['qrcode'] }}" alt="QR Code" style="width: 50px; height: 50px;">
+                        {% else %}
+                            <img src="/static/images/default-qrcode.png" alt="Default QR Code" style="width: 50px; height: 50px;">
+                        {% endif %}
+                    </td> -->
+                    
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+    <div id="customAlert" style="display: none;">
+        <div class="alert-content">
+            <h3>Are you sure you want to delete this student?</h3>
+            <div class="alert-buttons">
+                <form method="post" action="/delete_user" id="deleteForm">
+                    <input type="hidden" id="deleteIdNo" name="idno">
+                    <button type="submit" class="confirm-btn w3-red w3-button">Confirm</button>
+                </form>
+                <button class="cancel-btn w3-blue w3-button w3-margin-top w3-margin-bottom" onclick="closeAlert()">Cancel</button>
+            </div>
+        </div>
+    </div>
+    
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+<script>
+    function openCustomAlert(idno) {
+    document.getElementById('deleteIdNo').value = idno;
+    document.getElementById('customAlert').style.display = 'flex'; 
+    }
+
+    function closeAlert() {
+    document.getElementById('customAlert').style.display = 'none';
+    }
+
+        function substringer(str, phrase) {
+            const index = str.indexOf(phrase);
+            str = (index !== -1) ? str.slice(index) : ''; 
+            return str;
+        }
+
+        function defaultMsgIfTableEmpty() {
+            if (document.querySelectorAll('#table tbody #tr2').length == 0) {
+                console.log('table is empty');
+                document.getElementById('empty_table_msg').style = 'display: block;';
+            } else {
+                console.log('table is not empty!!');
+            }
+        }
+
+
+
+        (function () {
+            if (window.history && window.history.pushState) {
+                window.history.pushState(null, null, window.location.href);
+                window.onpopstate = function () {
+                    window.history.pushState(null, null, window.location.href);
+                };
+            }
+        })();
+
+</script>
+{% endblock %}

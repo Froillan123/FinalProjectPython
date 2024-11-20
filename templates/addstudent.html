@@ -1,0 +1,204 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+
+<div class='w3-container w3-blue w3-margin-bottom header'>
+    <h3 class="w3-left w3-margin-left w3-margin-top">{{ pagetitle }}</h3>
+    <nav class="navbar">
+        <a href="/logout" class="w3-button w3-red w3-right w3-margin-top w3-margin-bottom" id="logout">
+            <i class="fa fa-sign-out-alt"></i> LOG-OUT
+        </a>
+        <a href="/addstudent" class="w3-right w3-button w3-margin-right w3-white w3-margin-top" id="add">
+            <i class="fa fa-plus"></i> Add Student
+        </a>
+    </nav>
+</div>
+
+<div class="w3-row-padding">
+    <!-- Left Side -->
+    <div class="w3-half">
+        <div class="w3-container w3-padding w3-round-xlarge w3-card-4">
+            <form id="student_form" action="{{ url_for('add_student') }}" method="POST">
+                <div id="my_camera" style="margin:auto;"></div>
+                <p>
+                    <label><b>IDNO</b></label>
+                    <input type="text" name="idno" id="idno" class="w3-input" required>
+                </p>
+                <p>
+                    <label><b>LASTNAME</b></label>
+                    <input type="text" name="lastname" id="lastname" class="w3-input" required>
+                </p>
+                <p>
+                    <label><b>FIRSTNAME</b></label>
+                    <input type="text" name="firstname" id="firstname" class="w3-input" required>
+                </p>
+                <p>
+                    <label><b>COURSE</b></label>
+                    <select name="course" id="course" class="w3-select" required>
+                        <option value="" disabled selected class="custom-option"></option>
+                        <option value="BSIT">BSIT</option>
+                        <option value="BSCPE">BSCPE</option>
+                        <!-- Add more options as needed -->
+                    </select>
+                </p>
+                
+                <p>
+                    <label><b>LEVEL</b></label>
+                    <select name="level" id="level" class="w3-select" required>
+                        <option value="" disabled selected class="custom-option"></option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                    </select>
+                </p>
+                <br>
+                <input type="hidden" name="image_data" id="image_data">
+                <button type="button" class="w3-button w3-blue w3-margin-bottom" onclick="takeSnapshot()" id="snap_button" disabled>SNAP</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Right Side -->
+    <div class="w3-half">
+        <div class="w3-container w3-padding w3-round-xlarge w3-card-4">
+            <div id="snapshot_results">
+                <input type="hidden" name="qr_data" id="qr_data">
+                <div class="w3-center" style="display: flex; gap:1rem;">
+                    <img id="captured_image" style="width: 50%; max-height: 200px;">
+                    <img id="qr_code" style="width: 50%; max-height: 200px;" src="">
+                </div>
+                <table class="w3-table-all w3-margin-top">
+                    <tr><td>IDNO</td><td><div id="display_idno"></div></td></tr>
+                    <tr><td>LASTNAME</td><td><div id="display_lastname"></div></td></tr>
+                    <tr><td>FIRSTNAME</td><td><div id="display_firstname"></div></td></tr>
+                    <tr><td>COURSE</td><td><div id="display_course"></div></td></tr>
+                    <tr><td>LEVEL</td><td><div id="display_level"></div></td></tr>
+                </table>
+                <button type="submit" form="student_form" class="w3-button w3-green w3-margin-top">SAVE</button>
+                <button type="button" class="w3-button w3-red w3-margin-top" id="cancel_button">CANCEL</button> <!-- Cancel Button -->
+            </div>
+        </div>
+    </div>
+    </div>
+
+<script src="{{ url_for('static', filename='js/webcam.min.js') }}"></script>
+<script>
+
+Webcam.set({
+    width: 320,
+    height: 240,
+    image_format: 'jpeg',
+    jpeg_quality: 90
+});
+Webcam.attach('#my_camera');
+
+function checkFields() {
+    const idno = document.getElementById('idno').value;
+    const lastname = document.getElementById('lastname').value;
+    const firstname = document.getElementById('firstname').value;
+    const course = document.getElementById('course').value;
+    const level = document.getElementById('level').value;
+
+    document.getElementById('snap_button').disabled = !(idno && lastname && firstname && course && level);
+}
+
+document.getElementById('idno').addEventListener('input', checkFields);
+document.getElementById('lastname').addEventListener('input', checkFields);
+document.getElementById('firstname').addEventListener('input', checkFields);
+document.getElementById('course').addEventListener('input', checkFields);
+document.getElementById('level').addEventListener('input', checkFields);
+
+function takeSnapshot() {
+    Webcam.snap((data_uri) => {
+        document.getElementById('captured_image').src = data_uri;
+
+        const idno = document.getElementById('idno').value || 'Unknown ID';
+        document.getElementById('display_idno').textContent = idno;
+        document.getElementById('display_lastname').textContent = document.getElementById('lastname').value;
+        document.getElementById('display_firstname').textContent = document.getElementById('firstname').value;
+        document.getElementById('display_course').textContent = document.getElementById('course').value;
+        document.getElementById('display_level').textContent = document.getElementById('level').value;
+
+        document.getElementById('image_data').value = data_uri;
+
+        const qrData = {
+            idno: idno,
+            lastname: document.getElementById('lastname').value,
+            firstname: document.getElementById('firstname').value,
+            course: document.getElementById('course').value,
+            level: document.getElementById('level').value
+        };
+
+        fetch('/generate_qr', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(qrData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('qr_code').src = data.qr_path;
+            document.getElementById('qr_data').value = data.qr_data;
+        })
+        .catch(error => {});
+    });
+}
+
+document.querySelector("form").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const idno = document.getElementById('idno').value;
+    const lastname = document.getElementById('lastname').value;
+    const firstname = document.getElementById('firstname').value;
+    const course = document.getElementById('course').value;
+    const level = document.getElementById('level').value;
+    const image_data = document.getElementById('image_data').value;
+
+    if (!(idno && lastname && firstname && course && level && image_data)) {
+        alert('Please fill all fields and capture an image before saving!');
+        return;
+    }
+    this.submit();
+});
+
+document.getElementById('cancel_button').addEventListener('click', function() {
+    const idno = document.getElementById('idno') ? document.getElementById('idno').value : '';
+
+    document.getElementById('student_form').reset();
+
+    document.getElementById('captured_image').src = '';
+    document.getElementById('qr_code').src = '';
+    document.getElementById('image_data').value = '';
+    document.getElementById('qr_data').value = '';
+    document.getElementById('display_idno').innerHTML = '';
+    document.getElementById('display_lastname').innerHTML = '';
+    document.getElementById('display_firstname').innerHTML = '';
+    document.getElementById('display_course').innerHTML = '';
+    document.getElementById('display_level').innerHTML = '';
+
+    if (idno) {
+        fetch('/delete_qr', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ idno: idno })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (!data.success) {
+                alert('Error deleting the QR code');
+            }
+        })
+        .catch(error => {
+            alert('An error occurred while deleting the QR code');
+        });
+    }
+});
+</script>
+
+{% endblock %}

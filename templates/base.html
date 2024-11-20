@@ -1,0 +1,66 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset='utf-8'>
+		<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+		<meta http-equiv="X-UA-compatible" content='ie-edge'>
+		<link rel='stylesheet' href="../static/css/style.css">
+		<link rel="stylesheet" href="{{ url_for('static', filename='font-awesome/css/all.min.css') }}">
+		<link rel="icon" href="{{ url_for('static', filename='images/logo.png') }}" type="image/x-icon">
+		<title>Student QR Code Attendance Checker</title>
+
+	</head>
+	<body>
+	    <div>
+
+			{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+        <div class="w3-container flash-message 
+        {% if category == 'success' %}
+            success
+        {% elif category == 'error' %}
+            error
+        {% elif category == 'info' %}
+            info
+        {% elif category == 'delete-success' %}
+            delete-success
+        {% else %}
+            warning
+        {% endif %}
+        ">
+            {% if category == 'success' %}
+                <i class="fa fa-check-circle"></i>
+            {% elif category == 'error' %}
+                <i class="fa fa-times-circle"></i>
+            {% elif category == 'warning' %}
+                <i class="fa fa-exclamation-circle"></i>
+            {% elif category == 'delete-success' %}
+                <i class="fa fa-check-circle"></i>
+            {% elif category == 'info' %}
+                <i class="fa fa-info-circle"></i>
+            {% endif %}
+            <p>{{ message }}</p>
+        </div>
+        
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+
+	        {% block content %}
+					
+
+			
+	        {% endblock %}
+	    </div>
+	    <hr>
+	    <footer class="w3-center">
+            <div class="footer-box">
+	    	<p>Copyright &copy; 2024 by Edem Froillan Kim B and Jane Lopez | All Rights reserved</p>
+        </div>
+        </footer>
+	</body>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</html>
