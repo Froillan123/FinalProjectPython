@@ -41,7 +41,6 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
     menuIcon.onclick = () => {
-        menuIcon.classList.toggle('bx-x');
         navbar.classList.toggle('active');
     
         if (menuIcon.classList.contains('rotated')) {

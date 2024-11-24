@@ -663,7 +663,7 @@ html::-webkit-scrollbar-thumb
 #menu-icon.rotated-reverse {
     animation: rotateReverse 0.3s ease-in-out forwards;
 }
-@media (max-width: 1300px) {
+@media (max-width: 1360px) {
     #menu-icon {
         display: block;  
     }
@@ -671,12 +671,16 @@ html::-webkit-scrollbar-thumb
     .navbar {
         position: absolute;
         top: 100%;
-        left: 85%;
+        width: 100%;
+        left: 0;
         padding: 0.6rem 1%;
         display: none; 
         z-index: 10;
         transition: transform 0.3s ease;
         transform: translateY(-100%); 
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        border-top: 2px solid rgba(0, 0, 0, 0.1); 
+        background: #fff;
     }
 
     .navbar.active {
@@ -709,10 +713,6 @@ html::-webkit-scrollbar-thumb
         height: 40px;
     }
 
-    .navbar
-    {
-        left: 75%;
-    }
     .pagetitle
     {
         font-size: 16px;
@@ -723,6 +723,8 @@ html::-webkit-scrollbar-thumb
     {
         margin-top: 2rem;
     }
+
+    
     .form {
         height: auto;
     }
@@ -735,14 +737,12 @@ html::-webkit-scrollbar-thumb
         margin-right: 3px; 
     }
     .styled-table-wrapper {
-        border-collapse: separate; /* Change border-collapse */
-        table-layout: fixed; /* Change table layout */
-        overflow-x: auto; /* Add horizontal scroll */
+        border-collapse: separate; 
+        table-layout: fixed; 
+        overflow-x: auto; 
     }
-
-    /* Optional: You can also hide certain table properties */
     .styled-table th, .styled-table td {
-        border: none; /* Remove borders on smaller screens */
+        border: none;
     }
 }
 
@@ -755,6 +755,7 @@ html::-webkit-scrollbar-thumb
     .flash-message {
         width: 80%;
     }
+    
 }
 
 @media (max-width: 507px)
@@ -782,12 +783,33 @@ html::-webkit-scrollbar-thumb
     }
     #search-bar
     {
-        width: 180px;
         margin-left: 1rem;
+        width: 250px;
     
     }
     #log 
     {
         display: block;
+    }
+    .login-container 
+    {
+        min-height: auto;
+        margin-top: 3rem;
+    }
+    #loginForm {
+        width: 350px;
+        background: rgba(255, 255, 255, 0.9);
+        border: 2px solid rgba(0, 0, 0, 0.2);
+        color: #333;
+        border-radius: 10px;
+        padding: 30px 40px;
+    }
+}
+
+@media (max-width: 428px)
+{
+    #search-bar 
+    {
+        width: 200px;
     }
 }
