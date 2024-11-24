@@ -1,9 +1,6 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-
-
         <div class="login-container">
             <form method="POST" action="{{ url_for('login') }}" id="loginForm">
                 <h1 class="title">{{pagetitle}}</h1>
@@ -24,6 +21,7 @@
         </div>
 
 <script>
+    
 document.getElementById("togglePassword").addEventListener("click", function () {
         const passwordField = document.getElementById("password");
         const type = passwordField.getAttribute("type") === "password" ? "text" : "password";

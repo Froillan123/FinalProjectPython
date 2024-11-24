@@ -1,9 +1,11 @@
 <div class="header">
     <div class="left-section">
         <img src="../static/images/logo.png" alt="Logo" id="logo">
-        <h3 class="">{{ pagetitle }}</h3>
+        <h3 class="pagetitle">{{ pagetitle }}</h3>
+        <div class="search" style="position: relative;">
         <input type="text" placeholder="Search..." id="search-bar">
         <button type="submit" id="search-button"><i class="fa fa-search"></i></button>
+    </div>
     </div>
     <div class="navbar">
         <a href="/students" id="view-students">
@@ -15,8 +17,14 @@
         <a href="/addstudent" id="add-student">
             <i class="fa fa-plus"></i> Add Student
         </a>
+        <a href="/logout" id="log">
+            <i class="fa fa-sign-out-alt"></i> Log Out
+        </a>
     </div>
+    <div class="menu" style="position: relative;">
+    <i class="fa solid fa-gear" id="menu-icon"></i>
     <a href="/logout" id="logout">
         <i class="fa fa-sign-out-alt"></i>
     </a>
+    </div>
 </div>

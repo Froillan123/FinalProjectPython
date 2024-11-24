@@ -4,10 +4,10 @@
 {% endblock %}
 {% block content %}
 
-<div class="w3-row-padding" style="padding: 1rem 5%;">
+<div class="w3-row-padding" style="padding: 1rem 5%; margin-top: -2rem;">
     <!-- Left Side -->
     <div class="w3-half">
-        <div class="w3-container w3-padding w3-round-small w3-card-2">
+        <div class="w3-container w3-padding w3-round-small w3-card-2 form">
             <form id="student_form" action="{{ url_for('add_student') }}" method="POST">
                 <div id="my_camera" style="margin:auto;"></div>
                 <p>
@@ -58,11 +58,11 @@
     </div>
 
     <!-- Right Side -->
-    <div class="w3-half">
-        <div class="w3-container w3-padding w3-round-small w3-card-2">
-            <div id="snapshot_results">
+    <div class="w3-half" id="results">
+        <div class="w3-container w3-padding w3-round-small w3-card-2" style="height: 100vh; display: flex; flex-direction: column;">
+            <div id="snapshot_results" style="display: none;">
                 <input type="hidden" name="qr_data" id="qr_data">
-                <div class="w3-center" style="display: flex; gap:1rem;">
+                <div class="w3-center" style="display: flex; gap: 1rem;">
                     <img id="captured_image" style="width: 50%; max-height: 200px;">
                     <img id="qr_code" style="width: 50%; max-height: 200px;" src="">
                 </div>
@@ -74,11 +74,11 @@
                     <tr><td>LEVEL</td><td><div id="display_level"></div></td></tr>
                 </table>
                 <button type="submit" form="student_form" class="w3-button w3-green w3-margin-top">SAVE</button>
-                <button type="button" class="w3-button w3-red w3-margin-top" id="cancel_button">CANCEL</button> <!-- Cancel Button -->
+                <button type="button" class="w3-button w3-red w3-margin-top" id="cancel_button">CANCEL</button>
             </div>
         </div>
     </div>
-    </div>
+</div>
 
 <script src="{{ url_for('static', filename='js/webcam.min.js') }}"></script>
 <script>
@@ -131,6 +131,9 @@ function takeSnapshot() {
         document.getElementById('display_level').textContent = document.getElementById('level').value;
 
         document.getElementById('image_data').value = data_uri;
+
+        // Show the snapshot results
+        document.getElementById('snapshot_results').style.display = 'block';
 
         const qrData = {
             idno: idno,
@@ -189,6 +192,9 @@ document.getElementById('cancel_button').addEventListener('click', function() {
     document.getElementById('display_firstname').innerHTML = '';
     document.getElementById('display_course').innerHTML = '';
     document.getElementById('display_level').innerHTML = '';
+
+    // Hide the snapshot results and reset QR data
+    document.getElementById('snapshot_results').style.display = 'none';
 
     if (idno) {
         fetch('/delete_qr', {

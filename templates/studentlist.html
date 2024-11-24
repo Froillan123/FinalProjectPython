@@ -7,37 +7,42 @@
 
 <div class="w3-row-padding" id="main_container" style="height: 100vh;">
     <div class="w3-full" style="padding: 1rem 3%;">
-        <table class="w3-table-all styled-table" id="table">
-            <thead>
-                <tr id="tr1">
-                    <th class="w3-center">IDNO</th>
-                    <th class="w3-center">LASTNAME</th>
-                    <th class="w3-center">FIRSTNAME</th>
-                    <th class="w3-center">COURSE</th>
-                    <th class="w3-center">LEVEL</th>
-                    <th class="w3-center">Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for user in users %}
-                <tr id="tr2">
-                    <td class="w3-center" data-cell="IDNO:"><a>{{ user["idno"] }}</a></td>
-                    <td class="w3-center" data-cell="LASTNAME:">{{ user["lastname"] }}</td>
-                    <td class="w3-center" data-cell="FIRSTNAME:">{{ user["firstname"] }}</td>
-                    <td class="w3-center" data-cell="COURSE:">{{ user["course"] }}</td>
-                    <td class="w3-center" data-cell="LEVEL:">{{ user["level"] }}</td>
-                    <td class="w3-center" data-cell="ACTION:">
-                        
-                        <button class="w3-button w3-red delete-btn delete" onclick="openCustomAlert('{{ user['idno'] }}')">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <!-- Wrapper for horizontal scrolling -->
+        <div class="styled-table-wrapper">
+            <table class="w3-table-all styled-table" id="table">
+                <thead>
+                    <tr id="tr1">
+                        <th class="w3-center">IDNO</th>
+                        <th class="w3-center">LASTNAME</th>
+                        <th class="w3-center">FIRSTNAME</th>
+                        <th class="w3-center">COURSE</th>
+                        <th class="w3-center">LEVEL</th>
+                        <th class="w3-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr id="tr2">
+                        <td class="w3-center" data-cell="IDNO:"><a>{{ user["idno"] }}</a></td>
+                        <td class="w3-center" data-cell="LASTNAME:">{{ user["lastname"] }}</td>
+                        <td class="w3-center" data-cell="FIRSTNAME:">{{ user["firstname"] }}</td>
+                        <td class="w3-center" data-cell="COURSE:">{{ user["course"] }}</td>
+                        <td class="w3-center" data-cell="LEVEL:">{{ user["level"] }}</td>
+                        <td class="w3-center" data-cell="ACTION:">
+                            <button class="w3-button w3-red delete-btn delete" onclick="openCustomAlert('{{ user['idno'] }}')">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
+
+
+
 
 <div id="customAlert" style="display: none;">
     <div class="alert-content">
