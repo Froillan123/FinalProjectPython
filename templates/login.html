@@ -1,72 +1,44 @@
 {% extends 'base.html' %}
+
 {% block content %}
 
-			
-{% with messages = get_flashed_messages(with_categories=true) %}
-{% if messages %}
-{% for category, message in messages %}
 
 
-            <div class="flash-message 
-            {% if category == 'success' %} success
-            {% elif category == 'error' %} error
-            {% elif category == 'info' %} info
-            {% elif category == 'delete-success' %} delete-success
-            {% else %} warning {% endif %}">
-                {% if category == 'success' %}
-                    <i class="fa fa-check-circle"></i>
-                {% elif category == 'error' %}
-                    <i class="fa fa-times-circle"></i>
-                {% elif category == 'warning' %}
-                    <i class="fa fa-exclamation-circle"></i>
-                {% elif category == 'delete-success' %}
-                    <i class="fa fa-check-circle"></i>
-                {% elif category == 'info' %}
-                    <i class="fa fa-info-circle"></i>
-                {% endif %}
-                <p>{{ message }}</p>
-            </div>
-        {% endfor %}
-        {% endif %}
-        {% endwith %}
-
-<div class="login-container">
-    <form method="POST" action="{{ url_for('login') }}" id="loginForm">
-        <h1 class="title">{{pagetitle}}</h1>
-        <div class="input-container">
-            <input type="text" name="username" id="username" placeholder="Username">
-            <i class="fas fa-user icon user"></i>
+        <div class="login-container">
+            <form method="POST" action="{{ url_for('login') }}" id="loginForm">
+                <h1 class="title">{{pagetitle}}</h1>
+                <div class="input-container">
+                    <input type="text" name="username" id="username" placeholder="Username">
+                    <i class="fas fa-user icon user"></i>
+                </div>
+                
+                <div class="input-container">
+                    <input type="password" name="password" id="password" placeholder="Password">
+                    <i class="fas fa-eye-slash icon toggle-password" id="togglePassword"></i>
+                </div>
+                
+                <div class="input-container">
+                    <input type="submit" value="Login" class="btn">
+                </div>
+            </form>
         </div>
-        
-        <div class="input-container">
-            <input type="password" name="password" id="password" placeholder="Password">
-            <i class="fas fa-eye toggle-password" id="togglePassword"></i>
-        </div>
-        
-        <div class="input-container">
-            <input type="submit" value="Login" class="btn">
-        </div>
-    </form>
-</div>
-
-
-    
 
 <script>
 document.getElementById("togglePassword").addEventListener("click", function () {
-    const passwordField = document.getElementById("password");
-    const type = passwordField.getAttribute("type") === "password" ? "text" : "password";
-    passwordField.setAttribute("type", type);
-    
-    if (passwordField.type === "password") {
-        this.classList.remove("fa-eye-slash");
-        this.classList.add("fa-eye");
-    } else {
-        this.classList.remove("fa-eye");
-        this.classList.add("fa-eye-slash");
-    }
-});
+        const passwordField = document.getElementById("password");
+        const type = passwordField.getAttribute("type") === "password" ? "text" : "password";
+        passwordField.setAttribute("type", type);
+        
+        if (type === "password") {
+            this.classList.remove("fa-eye");
+            this.classList.add("fa-eye-slash");
+        } else {
+            this.classList.remove("fa-eye-slash");
+            this.classList.add("fa-eye");
+        }
+    });
 
+    
 
 </script>
 

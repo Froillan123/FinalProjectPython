@@ -51,7 +51,6 @@ def after_request(response):
     response.headers['Pragma'] = 'no-cache'
     response.headers['Expires'] = '-1'
     
-    # Ensure session is initialized before checking for 'username'
     if hasattr(session, 'username') and 'username' not in session:
         response.headers['Cache-Control'] = 'no-store'
         response.headers['Pragma'] = 'no-cache'
@@ -68,8 +67,8 @@ def logout():
     response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
     response.headers['Pragma'] = 'no-cache'
     response.headers['Expires'] = '-1'
-
     return response
+
 
 uploadfolder = 'static/images/'
 app.config['SECRET_KEY'] = '!@#$%^'
@@ -98,7 +97,6 @@ def generate_qr():
         course = data.get('course')
         level = data.get('level')
 
-        # Creating a string with more details to encode in the QR code
         qr_data = {
             'idno': idno,
             'lastname': lastname,
@@ -177,7 +175,6 @@ def add_student():
                 with open(image_path, 'wb') as img_file:
                     img_file.write(base64.b64decode(image_data))
 
-            # Generate QR code with more detailed information
             qr_data = {
                 'idno': idno,
                 'lastname': lastname,
@@ -185,7 +182,7 @@ def add_student():
                 'course': course,
                 'level': level
             }
-            qr_data_str = str(qr_data)  # Convert to string or use json.dumps
+            qr_data_str = str(qr_data) 
 
             qr_path = os.path.join('static/images/qrcode', f"{idno}.png")
             if not os.path.exists(os.path.dirname(qr_path)):
@@ -197,7 +194,6 @@ def add_student():
             img = qr.make_image(fill='black', back_color='white')
             img.save(qr_path)
 
-            # Save student information
             success = add_record(
                 'students',
                 idno=idno,
@@ -210,7 +206,7 @@ def add_student():
             )
 
             if success:
-                flash(f"Student with ID {idno} added successfully", 'success')
+                flash(f"Student added successfully", 'success')
                 return redirect(url_for('student_list'))
             else:
                 flash("There was an error saving the student details", 'error')
