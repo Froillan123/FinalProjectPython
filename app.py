@@ -10,7 +10,9 @@ app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_PERMANENT'] = False
 app.config['SESSION_FILE_DIR'] = os.path.join(app.instance_path, 'sessions')
 app.config['SECRET_KEY'] = 'Kimperor123'
-
+uploadfolder = 'static/images/'
+app.config['SECRET_KEY'] = '!@#$%^'
+app.config['UPLOAD_FOLDER'] = uploadfolder
 
 
 
@@ -66,11 +68,6 @@ def logout():
     response.headers['Pragma'] = 'no-cache'
     response.headers['Expires'] = '-1'
     return response
-
-
-uploadfolder = 'static/images/'
-app.config['SECRET_KEY'] = '!@#$%^'
-app.config['UPLOAD_FOLDER'] = uploadfolder
 
 
 @app.route('/students')
