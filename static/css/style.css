@@ -730,7 +730,7 @@ html::-webkit-scrollbar-thumb
     padding: 20px;
     border: 1px solid #888;
     width: 50%;
-    max-height: 95vh;
+    max-height: 85vh;
     overflow-y: auto; 
     position: relative; 
 }
@@ -749,9 +749,6 @@ html::-webkit-scrollbar-thumb
     border-radius: 10px;
     border: 3px solid #f1f1f1;
 }
-
-
-
 
 
 @media (max-width: 1402px) {
@@ -838,6 +835,10 @@ html::-webkit-scrollbar-thumb
     {
         margin-top: 2rem;
     }
+    .view-image 
+    {
+        flex-direction: column;
+    }
 
     
     .form {
@@ -873,12 +874,8 @@ html::-webkit-scrollbar-thumb
     }
     .view-modal-content {
         width: 80%;
-        height: 70vh;
     }
-    .view-image 
-    {
-        flex-direction: column;
-    }
+
     
 }
 

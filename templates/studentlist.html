@@ -24,7 +24,7 @@
                     {% for user in users %}
                     <tr id="tr2">
                         <td class="w3-center" data-cell="IDNO:">
-                            <a href="javascript:void(0);" onclick="viewStudent('{{ user['idno'] }}')">{{ user['idno'] }}</a>
+                            <a href="#" style="color: #2196F3; font-size: 1.1rem" onclick="viewStudent('{{ user['idno'] }}')">{{ user['idno'] }}</a>
                         </td>
                         
                         <td class="w3-center" data-cell="LASTNAME:">{{ user["lastname"] }}</td>
