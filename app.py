@@ -219,9 +219,6 @@ def add_student():
 
     return render_template('addstudent.html', pagetitle=pagetitle, qr_path=qr_path)
 
-
-
-
 @app.route('/delete_user', methods=['POST'])
 def delete_user():
     idno = request.form['idno']  
