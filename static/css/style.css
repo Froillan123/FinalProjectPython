@@ -715,7 +715,7 @@ html::-webkit-scrollbar-thumb
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(0, 0, 0, 0.4); 
+    background: rgba(0, 0, 0, 0.7);
     position: fixed;
     top: 0;
     right: 0;
@@ -736,7 +736,7 @@ html::-webkit-scrollbar-thumb
 }
 
 .view-modal-content::-webkit-scrollbar {
-    width: 12px;
+    width: 9px;
 }
 
 .view-modal-content::-webkit-scrollbar-track {
@@ -754,7 +754,7 @@ html::-webkit-scrollbar-thumb
 
 
 
-@media (max-width: 1360px) {
+@media (max-width: 1402px) {
     #menu-icon {
         display: block;  
     }
@@ -873,6 +873,7 @@ html::-webkit-scrollbar-thumb
     }
     .view-modal-content {
         width: 80%;
+        height: 70vh;
     }
     .view-image 
     {
