@@ -86,9 +86,8 @@
 
 <script src="{{ url_for('static', filename='js/webcam.min.js') }}"></script>
 <script>
-let isFrontCamera = true;
+ let isFrontCamera = true;
 
-// Configure webcam settings
 Webcam.set({
     width: 300,
     height: 250,
@@ -102,22 +101,21 @@ Webcam.set({
     }
 });
 
-// Initialize the webcam when the page loads
+// Initialize camera when page loads
 Webcam.attach('#my_camera');
 
-// Toggle camera mode (front/back)
+// Function to toggle between front and rear cameras
 function toggleCamera() {
-    isFrontCamera = !isFrontCamera;  // Toggle between front and back camera
-    Webcam.reset();  // Reset the current camera
+    isFrontCamera = !isFrontCamera;  // Toggle camera mode
+    Webcam.reset();  // Reset current camera
     Webcam.set({
         constraints: {
             facingMode: isFrontCamera ? 'user' : 'environment'
         }
-    }); // Reconfigure the webcam to the selected camera
-    Webcam.attach('#my_camera'); // Reattach the webcam to the DOM
+    }); // Reconfigure camera settings
+    Webcam.attach('#my_camera'); // Reattach the webcam with the new configuration
 }
 
-// Check if all fields are filled to enable the snapshot button
 function checkFields() {
     const idno = document.getElementById('idno').value;
     const lastname = document.getElementById('lastname').value;
@@ -125,32 +123,29 @@ function checkFields() {
     const course = document.getElementById('course').value;
     const level = document.getElementById('level').value;
 
-    // Enable the snapshot button only if all fields are filled
+    // Enable or disable the snap button based on field validity
     document.getElementById('snap_button').disabled = !(idno && lastname && firstname && course && level);
 }
 
-// Add event listeners to validate the fields
 document.getElementById('idno').addEventListener('input', checkFields);
 document.getElementById('lastname').addEventListener('input', checkFields);
 document.getElementById('firstname').addEventListener('input', checkFields);
 document.getElementById('course').addEventListener('input', checkFields);
 document.getElementById('level').addEventListener('input', checkFields);
 
-// Take snapshot and display results
 function takeSnapshot() {
     const idno = document.getElementById('idno').value;
 
-    // Validate the IDNO length
+    // Check if IDNO length is valid (between 3 and 10 characters)
     if (idno.length < 3 || idno.length > 10) {
         alert('IDNO must be between 3 and 10 characters.');
         return;  // Prevent further action if IDNO is invalid
     }
 
-    // Capture the snapshot
     Webcam.snap((data_uri) => {
         document.getElementById('captured_image').src = data_uri;
 
-        // Populate the displayed information with form data
+        // Populate the displayed information with the form values
         document.getElementById('display_idno').textContent = idno;
         document.getElementById('display_lastname').textContent = document.getElementById('lastname').value;
         document.getElementById('display_firstname').textContent = document.getElementById('firstname').value;
@@ -159,10 +154,9 @@ function takeSnapshot() {
 
         document.getElementById('image_data').value = data_uri;
 
-        // Display the snapshot results
+        // Show the snapshot results
         document.getElementById('snapshot_results').style.display = 'block';
 
-        // Prepare QR data
         const qrData = {
             idno: idno,
             lastname: document.getElementById('lastname').value,
@@ -171,7 +165,7 @@ function takeSnapshot() {
             level: document.getElementById('level').value
         };
 
-        // Generate QR code by sending the data to the server
+        // Send data to generate QR code and wait for the response before continuing
         fetch('/generate_qr', {
             method: 'POST',
             headers: {
@@ -181,16 +175,20 @@ function takeSnapshot() {
         })
         .then(response => response.json())
         .then(data => {
-            document.getElementById('qr_code').src = data.qr_path;
-            document.getElementById('qr_data').value = data.qr_data;
+            if (data.qr_path) {
+                document.getElementById('qr_code').src = data.qr_path;
+                document.getElementById('qr_data').value = data.qr_data;
+            } else {
+                alert('Error generating QR code.');
+            }
         })
         .catch(error => {
             console.error(error);
+            alert('Error generating QR code.');
         });
     });
 }
 
-// Handle form submission
 document.querySelector("form").addEventListener("submit", function(e) {
     e.preventDefault();
 
@@ -201,22 +199,20 @@ document.querySelector("form").addEventListener("submit", function(e) {
     const level = document.getElementById('level').value;
     const image_data = document.getElementById('image_data').value;
 
-    // Check if all fields are filled before submitting
     if (!(idno && lastname && firstname && course && level && image_data)) {
         alert('Please fill all fields and capture an image before saving!');
         return;
     }
 
-    // Submit the form
+    // After confirming the image data, we can submit the form
     this.submit();
 });
 
-// Cancel button logic
 document.getElementById('cancel_button').addEventListener('click', function() {
     const idno = document.getElementById('idno') ? document.getElementById('idno').value : '';
 
-    // Reset the form and the snapshot results
     document.getElementById('student_form').reset();
+
     document.getElementById('captured_image').src = '';
     document.getElementById('qr_code').src = '';
     document.getElementById('image_data').value = '';
@@ -227,10 +223,9 @@ document.getElementById('cancel_button').addEventListener('click', function() {
     document.getElementById('display_course').innerHTML = '';
     document.getElementById('display_level').innerHTML = '';
 
-    // Hide the snapshot results
+    // Hide the snapshot results and reset QR data
     document.getElementById('snapshot_results').style.display = 'none';
 
-    // Remove QR code from the server if necessary
     if (idno) {
         fetch('/delete_qr', {
             method: 'POST',
