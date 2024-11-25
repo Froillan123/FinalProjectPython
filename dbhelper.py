@@ -1,3 +1,4 @@
+#dbhelper.py
 from sqlite3 import connect, Row
 
 database = 'studentinfo.db'
@@ -15,6 +16,11 @@ def postprocess(sql: str, params=()) -> bool:
     finally:
         cursor.close()
         db.close()
+def get_student_by_id(idno: int) -> dict:
+    sql = 'SELECT * FROM students WHERE idno = ?'
+    student = getprocess(sql, (idno,))
+    return student[0] if student else None
+
 
 def getprocess(sql: str, params=()) -> list:
     db = connect(database)

@@ -525,14 +525,21 @@ html::-webkit-scrollbar-thumb
 }
 
 
-
+.switchcam 
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2rem;
+    display: none;
+}
 
 .ripple {
     position: absolute;
     border-radius: 50%;
     transform: scale(0);
     animation: ripple-animation 0.4s linear;
-    background-color: rgba(0, 0, 255, 0.4);
+    background-color: #2196F3;
     pointer-events: none;
     z-index: 1000; 
 }
@@ -627,7 +634,10 @@ html::-webkit-scrollbar-thumb
     text-align: center;
 }
 
-
+.images 
+{
+    display: flex; gap: 1rem;
+}
 .hidden {
     display: none;
 }
@@ -674,7 +684,10 @@ html::-webkit-scrollbar-thumb
     }
 }
 
-
+#captured_image, #qr_code 
+{
+    width: 50%; max-height: 200px;
+}
 
 #menu-icon.rotated {
     animation: rotate 0.3s ease-in-out forwards;
@@ -737,6 +750,18 @@ html::-webkit-scrollbar-thumb
     {
         font-size: 16px;
         margin-left: 5px;
+    }
+    .images 
+    {
+        flex-direction: column;
+    }
+    #captured_image, #qr_code 
+    {
+        width: 100%;
+    }
+    .switchcam 
+    {
+        display: flex;
     }
 
     #results

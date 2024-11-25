@@ -41,7 +41,40 @@
     </div>
 </div>
 
-
+<div id="viewModal" class="view-modal" style="display: none;">
+    <div class="view-modal-content w3-card-4">
+        <p class="w3-center w3-padding">
+            <img id="image-view" class="image">
+            <img id="qr-view" class="image">
+        </p>
+        <form method="post" action="/register" enctype="multipart/form-data">
+            <input type="hidden" name="flag" id="flag" value="0"> 
+            <input type="hidden" id="idno" name="idno">
+            <p>
+                <label><b>IDNO</b></label>
+                <input type="text" id="idno-view" name="idno" class="w3-input" readonly>
+            </p>
+            <p>
+                <label><b>LASTNAME</b></label>
+                <input type="text" id="lastname-view" name="lastname" class="w3-input" readonly>
+            </p>
+            <p>
+                <label><b>FIRSTNAME</b></label>
+                <input type="text" id="firstname-view" name="firstname" class="w3-input" readonly>
+            </p>
+            <p>
+                <label><b>COURSE</b></label>
+                <input type="text" id="course-view" name="course" class="w3-input" readonly>
+            </p>
+            <p>
+                <label><b>LEVEL</b></label>
+                <input type="text" id="level-view" name="level" class="w3-input" readonly>
+            </p>
+            <button type="button" class="w3-button w3-blue w3-margin-top" onclick="editRecord()">EDIT</button>
+            <button type="button" class="w3-button w3-amber w3-margin-top" onclick="closeModal()">CANCEL</button>
+        </form>
+    </div>
+</div>
 
 
 <div id="customAlert" style="display: none;">

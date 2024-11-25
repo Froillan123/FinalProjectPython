@@ -11,6 +11,9 @@
         <div class="w3-container w3-padding w3-round-small w3-card-2 form">
             <form id="student_form" action="{{ url_for('add_student') }}" method="POST">
                 <div id="my_camera" style="margin:auto;"></div>
+                <div class="switchcam">
+                    <button class="w3-button w3-blue" type="button" onclick="toggleCamera()">Switch Camera</button>
+            </div>
                 <p>
                     <label><b>IDNO</b></label>
                     <input type="text" name="idno" id="idno" class="w3-input"  minlength="3" maxlength="10"  required>
@@ -60,12 +63,12 @@
 
     <!-- Right Side -->
     <div class="w3-half" id="results">
-        <div class="w3-container w3-padding w3-round-small w3-card-2" style="height: 100vh; display: flex; flex-direction: column;">
+        <div class="w3-container w3-padding w3-round-small w3-card-2" style="height: 100vh;">
             <div id="snapshot_results" style="display: none;">
                 <input type="hidden" name="qr_data" id="qr_data">
-                <div class="w3-center" style="display: flex; gap: 1rem;">
-                    <img id="captured_image" style="width: 50%; max-height: 200px;">
-                    <img id="qr_code" style="width: 50%; max-height: 200px;" src="">
+                <div class="w3-center images">
+                    <img id="captured_image">
+                    <img id="qr_code" src="">
                 </div>
                 <table class="w3-table-all w3-margin-top">
                     <tr><td>IDNO</td><td><div id="display_idno"></div></td></tr>
@@ -83,6 +86,7 @@
 
 <script src="{{ url_for('static', filename='js/webcam.min.js') }}"></script>
 <script>
+ let isFrontCamera = true;
 
 Webcam.set({
     width: 300,
@@ -91,9 +95,26 @@ Webcam.set({
     fps: 60,
     force_flash: false,
     flip_horiz: true,
-    png_quality: 90
-    });
+    png_quality: 90,
+    constraints: {
+        facingMode: isFrontCamera ? 'user' : 'environment'
+    }
+});
+
+// Initialize camera when page loads
 Webcam.attach('#my_camera');
+
+// Function to toggle between front and rear cameras
+function toggleCamera() {
+    isFrontCamera = !isFrontCamera;  // Toggle camera mode
+    Webcam.reset();  // Reset current camera
+    Webcam.set({
+        constraints: {
+            facingMode: isFrontCamera ? 'user' : 'environment'
+        }
+    }); // Reconfigure camera settings
+    Webcam.attach('#my_camera'); // Reattach the webcam with the new configuration
+}
 
 function checkFields() {
     const idno = document.getElementById('idno').value;
@@ -216,6 +237,7 @@ document.getElementById('cancel_button').addEventListener('click', function() {
         });
     }
 });
+
 </script>
 
 {% endblock %}

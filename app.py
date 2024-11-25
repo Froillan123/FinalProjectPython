@@ -4,7 +4,6 @@ import base64
 import qrcode
 import os
 
-
 app = Flask(__name__)
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_PERMANENT'] = False
@@ -76,6 +75,19 @@ def student_list():
     else:
         flash("Please log in first!", "warning")  
         return redirect(url_for('login'))
+    
+@app.route('/viewstudent')
+def viewstudent():
+    if 'username' in session:
+        pagetitle = "Attendance"
+        return render_template('viewattendance.html', 
+                               data=getall_records('students'), 
+                               pagetitle=pagetitle, 
+                               users=get_users())
+    else:
+        flash("Please log in first!", "warning")  
+        return redirect(url_for('login'))
+
 
 @app.route('/generate_qr', methods=['POST'])
 def generate_qr():
@@ -206,6 +218,8 @@ def add_student():
             print(f"Exception: {e}")
 
     return render_template('addstudent.html', pagetitle=pagetitle, qr_path=qr_path)
+
+
 
 
 @app.route('/delete_user', methods=['POST'])
