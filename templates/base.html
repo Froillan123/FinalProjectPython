@@ -9,9 +9,12 @@
     <link rel="icon" href="{{ url_for('static', filename='images/logo.png') }}" type="image/x-icon">
     <title>Student QR Code Attendance Checker</title>
 </head>
+<style>
+
+
+</style>
 <body>
-
-
+    <div class="cursor"></div>
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
         {% for category, message in messages %}
@@ -31,14 +34,18 @@
         {% endfor %}
     {% endif %}
 {% endwith %}
+
     <div>
         {% block header %}{% endblock %}
-        {% block content %}{% endblock %}
+        {% block content %} 
+        
+        {% endblock %}
     </div>
     <hr>
     <footer class="w3-center">
         <div class="footer-box">
             <p>Copyright &copy; 2024 by Edem Froillan Kim B and Jane Lopez | All Rights reserved</p>
+
         </div>
     </footer>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>

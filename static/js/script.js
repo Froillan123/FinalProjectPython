@@ -195,3 +195,36 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('Table element not found');
     }
 });
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const cursor = document.querySelector('.cursor');
+
+    document.addEventListener('mousemove', e => {
+        cursor.style.top = `${e.pageY - 10}px`;
+        cursor.style.left = `${e.pageX - 10}px`;
+    });
+
+    document.addEventListener('click', e => {
+        cursor.classList.add("expand");
+
+        setTimeout(() => {
+            cursor.classList.remove("expand");
+        }, 500);
+        
+        setTimeout(() => {
+            const ripple = document.createElement('div');
+            ripple.classList.add('ripple');
+            const x = e.pageX;  
+            const y = e.pageY;  
+            const size = 50;
+            ripple.style.width = ripple.style.height = `${size}px`;
+            ripple.style.left = `${x - size / 2}px`;
+            ripple.style.top = `${y - size / 2}px`;
+            document.body.appendChild(ripple);
+            ripple.addEventListener('animationend', () => {
+                ripple.remove();
+            });
+        }, 100); 
+    });
+});
