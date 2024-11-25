@@ -1,3 +1,5 @@
 Flask==2.3.3
 qrcode[pil]==7.3.1
 gunicorn
+Flask-Caching==2.3.0
+redis==5.2.0
