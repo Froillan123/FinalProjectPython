@@ -22,6 +22,18 @@ def get_student_by_id(idno: int) -> dict:
     return student[0] if student else None
 
 
+def get_user(idno):
+    # Replace with database logic to retrieve student based on idno
+    # Example dictionary return structure
+    sample_data = {
+        "idno": idno,
+        "lastname": "Doe",
+        "firstname": "John",
+        "course": "BSIT",
+        "level": "3"
+    }
+    return sample_data
+
 def getprocess(sql: str, params=()) -> list:
     db = connect(database)
     cursor = db.cursor()

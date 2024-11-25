@@ -346,7 +346,7 @@ html::-webkit-scrollbar-thumb
     position: sticky;
     top: 0;
     z-index: 100;
-    margin-bottom: 3rem;
+    margin-bottom: 1rem;
 }
 
 .left-section {
@@ -541,7 +541,7 @@ html::-webkit-scrollbar-thumb
     animation: ripple-animation 0.4s linear;
     background-color: #2196F3;
     pointer-events: none;
-    z-index: 1000; 
+    z-index: 12000; 
 }
 
 @keyframes ripple-animation {
@@ -602,7 +602,7 @@ html::-webkit-scrollbar-thumb
     border-collapse: collapse;
     font-family: Arial, sans-serif;
     margin-bottom: 20px;
-    table-layout: auto; /* Enable auto-layout for flexibility */
+    table-layout: auto;
 }
 
 .styled-table th, .styled-table td {
@@ -638,6 +638,18 @@ html::-webkit-scrollbar-thumb
 {
     display: flex; gap: 1rem;
 }
+.view-image 
+{
+    display: flex;
+}
+.image
+{
+    width: 50%;
+    height: 320px;
+    margin-top: -1rem;
+}
+
+
 .hidden {
     display: none;
 }
@@ -696,6 +708,52 @@ html::-webkit-scrollbar-thumb
 #menu-icon.rotated-reverse {
     animation: rotateReverse 0.3s ease-in-out forwards;
 }
+
+
+.view-modal
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.4); 
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 10000;
+    height: 100%;
+    width: 100%;
+}
+.view-modal-content
+{
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%;
+    max-height: 95vh;
+    overflow-y: auto; 
+    position: relative; 
+}
+
+.view-modal-content::-webkit-scrollbar {
+    width: 12px;
+}
+
+.view-modal-content::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+    border-radius: 10px; 
+}
+
+.view-modal-content::-webkit-scrollbar-thumb {
+    background-color: #71b7f1; 
+    border-radius: 10px;
+    border: 3px solid #f1f1f1;
+}
+
+
+
+
+
 @media (max-width: 1360px) {
     #menu-icon {
         display: block;  

@@ -5,7 +5,7 @@
 {% block content %}
 
 
-<div class="w3-row-padding" style="padding: 1rem 5%; margin-top: -2rem;">
+<div class="w3-row-padding" style="padding: 1rem 5%;">
     <!-- Left Side -->
     <div class="w3-half">
         <div class="w3-container w3-padding w3-round-small w3-card-2 form">
@@ -133,7 +133,7 @@ function takeSnapshot() {
     const idno = document.getElementById('idno').value;
     if (idno.length < 3 || idno.length > 10) {
         alert('IDNO must be between 3 and 10 characters.');
-        return;  // Prevent further action if IDNO is invalid
+        return; 
     }
 
     Webcam.snap((data_uri) => {
@@ -195,7 +195,6 @@ document.querySelector("form").addEventListener("submit", function(e) {
         return;
     }
 
-    // After confirming the image data, we can submit the form
     this.submit();
 });
 
@@ -213,8 +212,6 @@ document.getElementById('cancel_button').addEventListener('click', function() {
     document.getElementById('display_firstname').innerHTML = '';
     document.getElementById('display_course').innerHTML = '';
     document.getElementById('display_level').innerHTML = '';
-
-    // Hide the snapshot results and reset QR data
     document.getElementById('snapshot_results').style.display = 'none';
 
     if (idno) {

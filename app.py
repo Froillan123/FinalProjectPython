@@ -122,6 +122,39 @@ def generate_qr():
         return jsonify({"error": str(e)}), 500
 
 
+@app.route('/get_student/<idno>', methods=['GET'])
+def get_student(idno):
+    try:
+        student = get_user(idno)
+ 
+        if isinstance(student, list):
+            student = student[0] if student else None
+
+        if not student:
+            return jsonify({"error": "Student not found"}), 404
+        
+        student_dict = dict(student)
+
+        image_path = f'static/images/Register/{student_dict["idno"]}.png'
+        qr_image_path = f"static/images/qrcode/{student_dict['idno']}.png"
+
+        if os.path.exists(qr_image_path):
+            student_dict['qr_code'] = url_for('static', filename=f'images/qrcode/{student_dict["idno"]}.png')
+        else:
+            student_dict['qr_code'] = url_for('static', filename='images/qrcode/default.png')
+        if os.path.exists(image_path):
+            student_dict['image'] = url_for('static', filename=f'images/Register/{student_dict["idno"]}.png')
+        else:
+            student_dict['image'] = url_for('static', filename='images/default.png')
+        return jsonify(student_dict)
+
+    except Exception as e:
+        print(f"Error retrieving student data: {e}")
+        return jsonify({"error": "An error occurred while retrieving the student data"}), 500
+
+
+
+
 
 @app.route('/delete_qr', methods=['POST'])
 def delete_qr():
@@ -218,6 +251,8 @@ def add_student():
             print(f"Exception: {e}")
 
     return render_template('addstudent.html', pagetitle=pagetitle, qr_path=qr_path)
+
+
 
 @app.route('/delete_user', methods=['POST'])
 def delete_user():
