@@ -23,7 +23,10 @@
                 <tbody>
                     {% for user in users %}
                     <tr id="tr2">
-                        <td class="w3-center" data-cell="IDNO:"><a>{{ user["idno"] }}</a></td>
+                        <td class="w3-center" data-cell="IDNO:">
+                            <a href="javascript:void(0);" onclick="viewStudent('{{ user['idno'] }}')">{{ user['idno'] }}</a>
+                        </td>
+                        
                         <td class="w3-center" data-cell="LASTNAME:">{{ user["lastname"] }}</td>
                         <td class="w3-center" data-cell="FIRSTNAME:">{{ user["firstname"] }}</td>
                         <td class="w3-center" data-cell="COURSE:">{{ user["course"] }}</td>
@@ -43,11 +46,17 @@
 
 <div id="viewModal" class="view-modal" style="display: none;">
     <div class="view-modal-content w3-card-4">
+        <div class="description" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid black; padding: 10px;">
+            <p style="text-align: center; flex-grow: 1; margin: 0; color: #2196F3; font-size: 18px;">Student Description</p>
+            <i class="fas fa-times w3-right" onclick="closeViewModal()" style="cursor: pointer; font-size: 25px; margin-top: -0.9rem; color: red;"></i>
+        </div>
         <p class="w3-center w3-padding">
-            <img id="image-view" class="image">
-            <img id="qr-view" class="image">
+            <div class="view-image">
+                <img id="image-view" class="image" />
+                <img id="qr-view" class="image" />
+            </div>
         </p>
-        <form method="post" action="/register" enctype="multipart/form-data">
+        <form method="post" action="/addstudent" enctype="multipart/form-data">
             <input type="hidden" name="flag" id="flag" value="0"> 
             <input type="hidden" id="idno" name="idno">
             <p>
@@ -70,12 +79,9 @@
                 <label><b>LEVEL</b></label>
                 <input type="text" id="level-view" name="level" class="w3-input" readonly>
             </p>
-            <button type="button" class="w3-button w3-blue w3-margin-top" onclick="editRecord()">EDIT</button>
-            <button type="button" class="w3-button w3-amber w3-margin-top" onclick="closeModal()">CANCEL</button>
         </form>
     </div>
 </div>
-
 
 <div id="customAlert" style="display: none;">
     <div class="alert-content">
@@ -108,6 +114,45 @@
             };
         }
     })();
+
+    function viewStudent(idno) {
+    fetch(`/get_student/${idno}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert(data.error);
+            } else {
+                document.getElementById('idno-view').value = data.idno;
+                document.getElementById('lastname-view').value = data.lastname;
+                document.getElementById('firstname-view').value = data.firstname;
+                document.getElementById('course-view').value = data.course;
+                document.getElementById('level-view').value = data.level;
+
+                const imageElement = document.getElementById('image-view');
+                if (data.image) {
+                    imageElement.src = data.image;
+                } else {
+                    imageElement.src = '/static/images/default.png';
+                }
+                const qrElement = document.getElementById('qr-view');
+                if (data.qr_code) {
+                    qrElement.src = data.qr_code;
+                } else {
+                    qrElement.src = '/static/images/qrcode/default.png'; 
+                }
+
+                document.getElementById('viewModal').style.display = 'flex';
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching student data:', error);
+            alert('An error occurred while fetching student data.');
+        });
+}
+
+function closeViewModal() {
+    document.getElementById('viewModal').style.display = 'none';
+}
 </script>
 
 {% endblock %}
