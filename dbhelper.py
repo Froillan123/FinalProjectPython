@@ -23,8 +23,6 @@ def get_student_by_id(idno: int) -> dict:
 
 
 def get_user(idno):
-    # Replace with database logic to retrieve student based on idno
-    # Example dictionary return structure
     sample_data = {
         "idno": idno,
         "lastname": "Doe",
