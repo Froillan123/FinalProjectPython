@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap");
+
 /* W3.CSS 4.15 December 2020 by Jan Egil and Borge Refsnes */
 html{box-sizing:border-box}*,*:before,*:after{box-sizing:inherit}
 /* Extract from normalize.css by Nicolas Gallagher and Jonathan Neal git.io/normalize */
@@ -235,6 +237,11 @@ hr{border:0;border-top:1px solid #eee;margin:20px 0}
 .w3-border-pale-yellow,.w3-hover-border-pale-yellow:hover{border-color:#ffffcc!important}.w3-border-pale-blue,.w3-hover-border-pale-blue:hover{border-color:#e7ffff!important}
 
 
+img 
+{
+    image-rendering: pixelated;
+}
+
 html::-webkit-scrollbar
 {
   width: 12px;
@@ -314,7 +321,25 @@ html::-webkit-scrollbar-thumb
     margin-left: 1rem;
 }
 
+.level-1 {
+    color: #01a32cfc;
+    font-size: 18px;
+}
 
+.level-2 {
+    color: #d900ff;
+    font-size: 18px;
+}
+
+.level-3 {
+    color: #2196F3;
+    font-size: 18px;
+}
+
+.level-4 {
+    color: #aeae00;
+    font-size: 18px; 
+}
 
 #togglePassword {
     cursor: pointer;
@@ -355,7 +380,7 @@ html::-webkit-scrollbar-thumb
 }
 
 #logo {
-    width: 45px; 
+    width: 55px; 
     height: auto;
     margin-right: 10px; 
 }
@@ -546,7 +571,7 @@ html::-webkit-scrollbar-thumb
 
 @keyframes ripple-animation {
     to {
-        transform: scale(1.1);
+        transform: scale(0.5);
         opacity: 0;
     }
 }
@@ -596,31 +621,46 @@ html::-webkit-scrollbar-thumb
     gap: 3rem;
 }
 
+*
+{
+    font-family: "Poppins", sans-serif;
+
+}
 
 .styled-table {
     width: 100%;
     border-collapse: collapse;
-    font-family: Arial, sans-serif;
-    margin-bottom: 20px;
-    table-layout: auto;
+    margin-top: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); 
+    border-radius: 8px; 
 }
 
 .styled-table th, .styled-table td {
     padding: 12px;
-    border: 1px solid #ddd;
-    text-align: left;
 }
 
 .styled-table th {
-    background-color: #0074D9;
-    color: white;
-    font-weight: bold;
+    background-color: #2196F3; 
+    color: white; 
+    border-bottom: 2px solid rgba(0, 0, 0, 0.2);
+    font-weight: 600;
+    text-transform: capitalize;
 }
 
-.styled-table tr:nth-child(even) {
-    background-color: #f2f2f2;
+.styled-table tr {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
+.styled-table tr:hover {
+    background-color: rgba(0, 0, 0, 0.05); 
+}
+
+
+.styled-table th:hover {
+    background-color: #2196F3;
+}
+
+/* Delete button styles */
 .styled-table .delete-btn {
     background-color: #ff4d4d;
     color: white;
@@ -630,9 +670,20 @@ html::-webkit-scrollbar-thumb
     border-radius: 4px;
 }
 
-.styled-table .delete-btn i {
+.styled-table .edit-btn {
+    background-color: #2196F3;
+    color: white;
+    padding: 6px 12px;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.styled-table .delete-btn i,
+.styled-table .edit-btn i {
     text-align: center;
 }
+
 
 .images 
 {
@@ -641,11 +692,18 @@ html::-webkit-scrollbar-thumb
 .view-image 
 {
     display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5rem;
+}
+#image-view 
+{
+    border-radius: 50%;
 }
 .image
 {
-    width: 50%;
-    height: 320px;
+    width: 170px;
+    height: 170px;
     margin-top: -1rem;
 }
 
@@ -729,7 +787,7 @@ html::-webkit-scrollbar-thumb
     margin: auto;
     padding: 20px;
     border: 1px solid #888;
-    width: 50%;
+    width: 45%;
     max-height: 85vh;
     overflow-y: auto; 
     position: relative; 
@@ -792,7 +850,7 @@ html::-webkit-scrollbar-thumb
     }   
 }
 
-@media (max-width: 823px)
+@media (max-width: 1099px)
 {
     .view-modal-content {
         width: 70%;
@@ -816,11 +874,6 @@ html::-webkit-scrollbar-thumb
     .images 
     {
         flex-direction: column;
-    }
-    .image
-    {
-        width: 100%;
-        height: 250px;
     }
     #captured_image, #qr_code 
     {

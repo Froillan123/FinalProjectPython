@@ -196,6 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+//For Cursor 
 
 document.addEventListener('DOMContentLoaded', () => {
     const cursor = document.querySelector('.cursor');

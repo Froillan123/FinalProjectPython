@@ -6,6 +6,7 @@ import os
 import redis
 from flask_caching import Cache
 
+
 app = Flask(__name__)
 app.config['SESSION_TYPE'] = 'filesystem'
 app.config['SESSION_PERMANENT'] = False

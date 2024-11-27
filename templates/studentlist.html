@@ -5,33 +5,40 @@
 {% block content %}
 
 
-<div class="w3-row-padding" id="main_container" style="height: 100vh;">
+<div id="main_container" style="height: 100vh;">
     <div class="w3-full" style="padding: 1rem 3%;">
+
         <!-- Wrapper for horizontal scrolling -->
         <div class="styled-table-wrapper">
-            <table class="w3-table-all styled-table" id="table">
+            <table class="styled-table" id="table">
                 <thead>
                     <tr id="tr1">
-                        <th class="w3-center">IDNO</th>
-                        <th class="w3-center">LASTNAME</th>
-                        <th class="w3-center">FIRSTNAME</th>
-                        <th class="w3-center">COURSE</th>
-                        <th class="w3-center">LEVEL</th>
+                        <th>IDno</th>
+                        <th>Lastname</th>
+                        <th>Firstname</th>
+                        <th>Course</th>
+                        <th>Level</th>
                         <th class="w3-center">Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for user in users %}
                     <tr id="tr2">
-                        <td class="w3-center" data-cell="IDNO:">
+                        <td class="w3-center" data-cell="IDNO:" id="idno">
                             <a href="#" style="color: #2196F3; font-size: 1.1rem" onclick="viewStudent('{{ user['idno'] }}')">{{ user['idno'] }}</a>
                         </td>
                         
                         <td class="w3-center" data-cell="LASTNAME:">{{ user["lastname"] }}</td>
                         <td class="w3-center" data-cell="FIRSTNAME:">{{ user["firstname"] }}</td>
                         <td class="w3-center" data-cell="COURSE:">{{ user["course"] }}</td>
-                        <td class="w3-center" data-cell="LEVEL:">{{ user["level"] }}</td>
+                        
+                        <!-- Apply class to the Level column based on the level value -->
+                        <td class="w3-center level-{{ user['level'] }}" data-cell="LEVEL:">{{ user["level"] }}</td>
+                        
                         <td class="w3-center" data-cell="ACTION:">
+                            <button class="w3-button w3-amber edit-btn edit">
+                                <i class="fas fa-pen"></i>
+                            </button>
                             <button class="w3-button w3-red delete-btn delete" onclick="openCustomAlert('{{ user['idno'] }}')">
                                 <i class="fas fa-times"></i>
                             </button>
