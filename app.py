@@ -96,13 +96,9 @@ def generate_qr():
         firstname = data.get('firstname')
         course = data.get('course')
         level = data.get('level')
-
         qr_data = {'idno': idno, 'lastname': lastname, 'firstname': firstname, 'course': course, 'level': level}
         qr_data_str = str(qr_data)
-
         qr_path = os.path.join(QRCODE_DIR, f"{idno}.png")
-        
-        # Only generate QR if it doesn't exist
         if not os.path.exists(qr_path):
             qr = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=10, border=4)
             qr.add_data(qr_data_str)
@@ -121,19 +117,14 @@ def get_student(idno):
         student = get_user(idno)
         if isinstance(student, list):
             student = student[0] if student else None
-
         if not student:
             return jsonify({"error": "Student not found"}), 404
-        
         student_dict = dict(student)
         image_path = os.path.join(REGISTER_DIR, f'{student_dict["idno"]}.png')
         qr_image_path = os.path.join(QRCODE_DIR, f'{student_dict["idno"]}.png')
-
         student_dict['image'] = url_for('static', filename=f'images/Register/{student_dict["idno"]}.png') if os.path.exists(image_path) else url_for('static', filename='images/default.png')
         student_dict['qr_code'] = url_for('static', filename=f'images/qrcode/{student_dict["idno"]}.png') if os.path.exists(qr_image_path) else url_for('static', filename='images/qrcode/default.png')
-        
         return jsonify(student_dict)
-
     except Exception as e:
         print(f"Error retrieving student data: {e}")
         return jsonify({"error": "An error occurred while retrieving the student data"}), 500
@@ -150,7 +141,6 @@ def delete_qr():
             return jsonify({"success": True})
         else:
             return jsonify({"error": "QR code not found"}), 404
-
     except Exception as e:
         print(f"Error occurred: {e}")
         return jsonify({"error": str(e)}), 500
