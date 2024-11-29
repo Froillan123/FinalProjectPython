@@ -551,6 +551,21 @@ html::-webkit-scrollbar-thumb
     }
 }
 
+#timestamp {
+    color: #007bff;
+    font-size: 17px;
+    font-weight: 500;
+    text-align: center;
+    padding: 5px 0;
+    margin-top: 15px;
+    letter-spacing: 1px;
+    border-bottom: 1px solid #2196F3;
+    width: fit-content;
+    margin-left: auto;
+    margin-right:1rem;
+}
+
+
 #customAlert {
     position: fixed;
     top: 0;
@@ -685,52 +700,60 @@ html::-webkit-scrollbar-thumb
     align-items: center;
     gap: 2rem;
 }
-#menu-icon {
-    font-size: 20px;
-    color: #3a3a3a;
-    display: none;
-    transition: transform 0.3s ease, color 0.3s ease;
-}
+
 #log 
 {
     display: none;
 }
 
+
+#menu-icon {
+    font-size: 20px;
+    color: #3a3a3a;
+    cursor: pointer;
+    display: none;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
 @keyframes rotate {
     0% {
         transform: rotate(0deg);
-        color: #2196F3;
+        color: #3a3a3a; /* Default color */
     }
     100% {
         transform: rotate(180deg);
-        color: #2196F3;
+        color: #2196F3; /* Blue color */
     }
 }
 
+/* Reverse rotation and reset the color to default */
 @keyframes rotateReverse {
     0% {
         transform: rotate(180deg);
-        color: #2196F3;
+        color: #2196F3; /* Blue color */
     }
     100% {
         transform: rotate(0deg);
-        color: #3a3a3a;
+        color: #3a3a3a; /* Default color */
     }
 }
+
+/* Apply the forward rotation animation */
+#menu-icon.rotated {
+    animation: rotate 0.3s forwards;
+}
+
+/* Apply the reverse rotation animation */
+#menu-icon.rotated-reverse {
+    animation: rotateReverse 0.3s forwards;
+}
+
+
 
 #captured_image, #qr_code 
 {
     width: 50%; max-height: 200px;
 }
-
-#menu-icon.rotated {
-    animation: rotate 0.3s ease-in-out forwards;
-}
-
-#menu-icon.rotated-reverse {
-    animation: rotateReverse 0.3s ease-in-out forwards;
-}
-
 
 .view-modal
 {
@@ -892,7 +915,12 @@ html::-webkit-scrollbar-thumb
     .view-modal-content {
         width: 80%;
     }
+    #timestamp
+    {
+        font-size: 16px;
+        border-bottom: none;
 
+    }
     
 }
 

@@ -1,6 +1,8 @@
 #dbhelper.py
 from sqlite3 import connect, Row
 import sqlite3
+import base64
+
 database = 'studentinfo.db'
 
 def postprocess(sql: str, params=()) -> bool:
@@ -20,30 +22,6 @@ def get_student_by_id(idno: int) -> dict:
     sql = 'SELECT * FROM students WHERE idno = ?'
     student = getprocess(sql, (idno,))
     return student[0] if student else None
-
-
-def check_qrcode(scanned_qr_code):
-    conn = sqlite3.connect(database)
-    cursor = conn.cursor()
-    try:
-        cursor.execute("SELECT idno, firstname, lastname, course, level FROM students WHERE qrcode = ?", (scanned_qr_code,))
-        result = cursor.fetchone()
-        if result:
-            return {
-                'idno': result[0],
-                'firstname': result[1],
-                'lastname': result[2],
-                'course': result[3],
-                'level': result[4]
-            }
-        return None
-    except Exception as e:
-        print(f"Error checking QR code: {e}")
-        return None
-    finally:
-        conn.close()
-
-
 
 def get_user(idno):
     sample_data = {
@@ -91,11 +69,13 @@ def add_record(table: str, **kwargs) -> bool:
     return postprocess(sql, values)
 
 def update_record(table: str, **kwargs) -> bool:
+    # Extract the keys and values from kwargs
     keys = list(kwargs.keys())
     values = list(kwargs.values())
-    fields = ", ".join(f"`{keys[i]}` = ?" for i in range(1, len(keys)))
+    fields = ", ".join([f"`{key}` = ?" for key in keys[1:]])  
     sql = f"UPDATE `{table}` SET {fields} WHERE `{keys[0]}` = ?"
-    return postprocess(sql, values[1:] + [values[0]])
+    return postprocess(sql, values[1:] + [values[0]])  
+
 
 def delete_record(table: str, **kwargs) -> bool:
     keys = list(kwargs.keys())

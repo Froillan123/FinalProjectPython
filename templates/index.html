@@ -1,10 +1,60 @@
 {% extends 'base.html' %}
 {% block content %}
 
+<style>
+    #reader {
+        width: 300px;
+        height: 300px;
+        margin: 0 auto;
+    }
+    .scanner-container {
+        text-align: center;
+        margin-top: 20px;
+    }
+    .result {
+        margin-top: 10px;
+    }
+</style>
+
+<script src="https://unpkg.com/html5-qrcode/html5-qrcode.min.js"></script>
+
+
 <div class='w3-container w3-blue w3-margin-bottom'>
     <h3 class="w3-left w3-margin-left w3-margin-top" style="color: white;">{{ pagetitle }}</h3>
 </div>
+<div id="timestamp"></div> 
+<div class="scanner-container">
+    <h2>Scan QR Code</h2>
+    <div id="reader"></div>
+    <div class="result">
+        <h3>Scanned Data:</h3>
+        <p id="qr-result">No data scanned yet.</p>
+    </div>
+</div>
 
+<script>
+    const qrCodeResult = document.getElementById('qr-result');
+    const html5QrCode = new Html5Qrcode("reader");
 
+    function onScanSuccess(decodedText) {
+    qrCodeResult.innerText = decodedText;
+
+    }
+
+    function onScanFailure(error) {
+      
+    }
+    html5QrCode.start(
+        { facingMode: "environment" }, 
+        {
+            fps: 10, 
+            qrbox: { width: 250, height: 250 } 
+        },
+        onScanSuccess,
+        onScanFailure
+    ).catch(err => {
+    
+    });
+</script>
 
 {% endblock %}

@@ -29,14 +29,24 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Menu icon toggle for mobile
     const menuIcon = document.querySelector('#menu-icon');
     const navbar = document.querySelector('.navbar');
+    
     if (menuIcon && navbar) {
         menuIcon.onclick = () => {
+            // Toggle the 'active' class for the navbar (show or hide the menu)
             navbar.classList.toggle('active');
-            menuIcon.classList.toggle('rotated');
-            menuIcon.classList.toggle('rotated-reverse');
+            
+            // Toggle the rotation and color change on the icon
+            if (navbar.classList.contains('active')) {
+                // If the menu is active (opened), rotate the icon and change color to blue
+                menuIcon.classList.add('rotated');
+                menuIcon.classList.remove('rotated-reverse');
+            } else {
+                // If the menu is not active (closed), reverse the rotation and reset color
+                menuIcon.classList.add('rotated-reverse');
+                menuIcon.classList.remove('rotated');
+            }
         };
     }
 
@@ -116,27 +126,26 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         console.error('Table element not found');
     }
+});
 
-    // Cursor effect
-    const cursor = document.querySelector('.cursor');
-    if (cursor) {
-        document.addEventListener('mousemove', e => {
-            cursor.style.top = `${e.pageY - 10}px`;
-            cursor.style.left = `${e.pageX - 10}px`;
-        });
 
-        document.addEventListener('click', e => {
-            cursor.classList.add("expand");
-            setTimeout(() => cursor.classList.remove("expand"), 500);
+window.addEventListener('DOMContentLoaded', function() {
+    let element = document.getElementById('timestamp');
+    
+    if (element) {
+        function updateTime() {
+            let date = new Date();
 
-            const ripple = document.createElement('div');
-            ripple.classList.add('ripple');
-            const size = 50;
-            ripple.style.width = ripple.style.height = `${size}px`;
-            ripple.style.left = `${e.pageX - size / 2}px`;
-            ripple.style.top = `${e.pageY - size / 2}px`;
-            document.body.appendChild(ripple);
-            ripple.addEventListener('animationend', () => ripple.remove());
-        });
+            let formattedTime = date.toString(); 
+            
+            element.textContent = formattedTime;
+        }
+        
+        updateTime();
+        
+        setInterval(updateTime, 1000);
+    } else {
+        console.log("Element with id 'timestamp' not found");
     }
 });
+

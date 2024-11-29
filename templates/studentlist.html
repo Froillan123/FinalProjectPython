@@ -5,6 +5,8 @@
 {% block content %}
 
 
+<div id="timestamp"></div> 
+
 <div id="main_container" style="height: 100vh;">
     <div class="w3-full" style="padding: 1rem 3%;">
 
@@ -36,7 +38,7 @@
                         <td class="w3-center level-{{ user['level'] }}" data-cell="LEVEL:">{{ user["level"] }}</td>
                         
                         <td class="w3-center" data-cell="ACTION:" style="display: flex; align-items: center; justify-content: center; gap: 1rem;">
-                            <button class="w3-button w3-amber edit-btn edit">
+                            <button class="w3-button w3-amber edit-btn edit" onclick="openEditModal('{{ user['idno'] }}', '{{ user['lastname'] }}', '{{ user['firstname'] }}', '{{ user['course'] }}', '{{ user['level'] }}')">
                                 <i class="fas fa-pen"></i>
                             </button>
                             <button class="w3-button w3-red delete-btn delete" onclick="openCustomAlert('{{ user['idno'] }}')">
@@ -89,6 +91,40 @@
         </form>
     </div>
 </div>
+
+<!-- Edit Modal -->
+<div id="editModal" class="view-modal" style="display: none;">
+    <div class="view-modal-content w3-card-4">
+        <div class="description" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid black; padding: 10px;">
+            <p style="text-align: center; flex-grow: 1; margin: 0; color: #2196F3; font-size: 18px;">Edit Student</p>
+            <i class="fas fa-times w3-right" onclick="closeEditModal()" style="cursor: pointer; font-size: 25px; margin-top: -0.9rem; color: red;"></i>
+        </div>
+        <form method="post" action="/edit_student" enctype="multipart/form-data">
+            <p>
+                <label><b>IDNO</b></label>
+                <input type="text" id="edit-idno-view" name="idno" class="w3-input" readonly>
+            </p>
+            <p>
+                <label><b>LASTNAME</b></label>
+                <input type="text" id="edit-lastname-view" name="lastname" class="w3-input">
+            </p>
+            <p>
+                <label><b>FIRSTNAME</b></label>
+                <input type="text" id="edit-firstname-view" name="firstname" class="w3-input">
+            </p>
+            <p>
+                <label><b>COURSE</b></label>
+                <input type="text" id="edit-course-view" name="course" class="w3-input">
+            </p>
+            <p>
+                <label><b>LEVEL</b></label>
+                <input type="text" id="edit-level-view" name="level" class="w3-input">
+            </p>
+            <button type="submit" class="w3-button w3-blue">Save Changes</button>
+        </form>
+    </div>
+</div>
+
 
 <div id="customAlert" style="display: none;">
     <div class="alert-content">

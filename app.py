@@ -72,11 +72,13 @@ def logout():
 def student_list():
     if 'username' in session:
         pagetitle = "Student List"
-        users = get_users()
-        return render_template('studentlist.html', data=getall_records('students'), pagetitle=pagetitle, users=users)
+        users = get_users() 
+        students = getall_records('students')  
+        return render_template('studentlist.html', data=students, pagetitle=pagetitle, users=users)
     else:
         flash("Please log in first!", "warning")
         return redirect(url_for('login'))
+
 
 @app.route('/viewstudent')
 def viewstudent():
@@ -130,24 +132,35 @@ def get_student(idno):
         return jsonify({"error": "An error occurred while retrieving the student data"}), 500
     
 
-@app.route('/check_qr_code', methods=['POST'])
-def check_qr_code():
-    try:
-        data = request.get_json()
-        scanned_qr_code = data.get('scanned_qr_code')
-        
-        if not scanned_qr_code:
-            return jsonify({"error": "No QR code provided"}), 400
+@app.route('/edit_student', methods=['POST'])
+def edit_student():
+    if 'username' in session:
+        idno = request.form.get('idno')
+        lastname = request.form.get('lastname')
+        firstname = request.form.get('firstname')
+        course = request.form.get('course')
+        level = request.form.get('level')
 
-        student_info = check_qrcode(scanned_qr_code)
+        # Ensure all the fields are present
+        if not all([idno, lastname, firstname, course, level]):
+            flash('All fields are required.', 'error')
+            return redirect(url_for('student_list'))
 
-        if student_info:
-            student_info['image'] = url_for('static', filename=f'images/Register/{student_info["idno"]}.png') if os.path.exists(f'static/images/Register/{student_info["idno"]}.png') else url_for('static', filename='images/default.png')
-            return jsonify(student_info)
+        # Update the student record in the database
+        updated = update_record('students', idno=idno, lastname=lastname, firstname=firstname, course=course, level=level)
+
+        if updated:
+            flash('Student information updated successfully!', 'success')
         else:
-            return jsonify({"error": "Student not found"}), 404
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+            flash('Error updating student information.', 'error')
+
+        return redirect(url_for('student_list'))
+    else:
+        flash('Please log in first!', 'warning')
+        return redirect(url_for('login'))
+
+
+    
 
 @app.route('/delete_qr', methods=['POST'])
 def delete_qr():
