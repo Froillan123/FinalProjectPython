@@ -1,6 +1,6 @@
 #dbhelper.py
 from sqlite3 import connect, Row
-
+import sqlite3
 database = 'studentinfo.db'
 
 def postprocess(sql: str, params=()) -> bool:
@@ -20,6 +20,29 @@ def get_student_by_id(idno: int) -> dict:
     sql = 'SELECT * FROM students WHERE idno = ?'
     student = getprocess(sql, (idno,))
     return student[0] if student else None
+
+
+def check_qrcode(scanned_qr_code):
+    conn = sqlite3.connect(database)
+    cursor = conn.cursor()
+    try:
+        cursor.execute("SELECT idno, firstname, lastname, course, level FROM students WHERE qrcode = ?", (scanned_qr_code,))
+        result = cursor.fetchone()
+        if result:
+            return {
+                'idno': result[0],
+                'firstname': result[1],
+                'lastname': result[2],
+                'course': result[3],
+                'level': result[4]
+            }
+        return None
+    except Exception as e:
+        print(f"Error checking QR code: {e}")
+        return None
+    finally:
+        conn.close()
+
 
 
 def get_user(idno):

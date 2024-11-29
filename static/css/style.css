@@ -321,25 +321,6 @@ html::-webkit-scrollbar-thumb
     margin-left: 1rem;
 }
 
-.level-1 {
-    color: #01a32cfc;
-    font-size: 18px;
-}
-
-.level-2 {
-    color: #d900ff;
-    font-size: 18px;
-}
-
-.level-3 {
-    color: #2196F3;
-    font-size: 18px;
-}
-
-.level-4 {
-    color: #aeae00;
-    font-size: 18px; 
-}
 
 #togglePassword {
     cursor: pointer;

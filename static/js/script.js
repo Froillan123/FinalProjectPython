@@ -1,12 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Flash message handling
     const flashMessages = document.querySelectorAll('.flash-message');
-    
     flashMessages.forEach((flashMessage) => {
         setTimeout(() => {
             flashMessage.classList.add('fade-out');
         }, 2500);
-
         flashMessage.addEventListener('animationend', () => {
             flashMessage.remove();
         });
@@ -34,44 +32,33 @@ document.addEventListener('DOMContentLoaded', () => {
     // Menu icon toggle for mobile
     const menuIcon = document.querySelector('#menu-icon');
     const navbar = document.querySelector('.navbar');
-
     if (menuIcon && navbar) {
         menuIcon.onclick = () => {
             navbar.classList.toggle('active');
+            menuIcon.classList.toggle('rotated');
+            menuIcon.classList.toggle('rotated-reverse');
         };
     }
-    menuIcon.onclick = () => {
-        navbar.classList.toggle('active');
-    
-        if (menuIcon.classList.contains('rotated')) {
-            menuIcon.classList.remove('rotated');
-            menuIcon.classList.add('rotated-reverse');
-        } else {
-            menuIcon.classList.remove('rotated-reverse');
-            menuIcon.classList.add('rotated');
-        }
-    };
+
     // Scroll event for sticky navbar and active section highlighting
     let sections = document.querySelectorAll('section');
     let navLinksForScroll = document.querySelectorAll('header nav a');
-    
     window.onscroll = () => {
-        // Handle active link based on scroll position
         sections.forEach(sec => {
             let top = window.scrollY;
             let offset = sec.offsetTop - 150;
             let height = sec.offsetHeight;
             let id = sec.getAttribute('id');
-
             if (top >= offset && top < offset + height) {
                 navLinksForScroll.forEach(link => {
                     link.classList.remove('active');
-                    document.querySelector('header nav a[href*="' + id + '"]').classList.add('active');
+                    const activeLink = document.querySelector(`header nav a[href*="${id}"]`);
+                    if (activeLink) activeLink.classList.add('active');
                 });
             }
         });
 
-        let header = document.querySelector('header');
+        const header = document.querySelector('header');
         if (header) {
             header.classList.toggle('sticky', window.scrollY > 100);
         }
@@ -86,146 +73,70 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchBar = document.getElementById('search-bar');
     const searchButton = document.getElementById('search-button');
     const table = document.getElementById('table');
+    const noResultsMessage = document.createElement('tr');
+    noResultsMessage.innerHTML = `<td colspan="6" class="w3-center">No student existed</td>`;
+    noResultsMessage.style.display = 'none';
+    table.querySelector('tbody').appendChild(noResultsMessage);
 
     if (table) {
-        const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
-        const noResultsMessage = document.createElement('div');
-        noResultsMessage.id = 'no-results';
-        noResultsMessage.style.display = 'none';
-        noResultsMessage.textContent = 'No student found';
-        table.parentNode.insertBefore(noResultsMessage, table.nextSibling);
-
-        function calculateCloseness(a, b) {
-            if (a.length === 0) return b.length;
-            if (b.length === 0) return a.length;
-
-            let matrix = [];
-            for (let i = 0; i <= b.length; i++) {
-                matrix[i] = [i];
-            }
-
-            for (let j = 0; j <= a.length; j++) {
-                matrix[0][j] = j;
-            }
-
-            for (let i = 1; i <= b.length; i++) {
-                for (let j = 1; j <= a.length; j++) {
-                    if (b.charAt(i - 1) === a.charAt(j - 1)) {
-                        matrix[i][j] = matrix[i - 1][j - 1];
-                    } else {
-                        matrix[i][j] = Math.min(matrix[i - 1][j - 1] + 1, Math.min(matrix[i][j - 1] + 1, matrix[i - 1][j] + 1));
-                    }
-                }
-            }
-
-            return matrix[b.length][a.length];
-        }
-
-        function filterTable() {
+        const rows = Array.from(table.querySelectorAll('tbody tr')).filter(row => !row.contains(noResultsMessage));
+        const filterByIdno = () => {
             const searchValue = searchBar.value.toLowerCase();
             let matches = 0;
-            let rowArray = Array.from(rows);
-
-            // Calculate closeness for each row and prioritize exact matches
-            let closenessArray = rowArray.map(row => {
-                const cellValue = row.cells[0].textContent.toLowerCase();
-                const isExactMatch = cellValue === searchValue;
-                const closeness = calculateCloseness(searchValue, cellValue);
-                return {
-                    row: row,
-                    isExactMatch: isExactMatch,
-                    closeness: closeness
-                };
+            rows.forEach(row => {
+                const idnoCell = row.querySelector('[data-cell="IDNO:"]');
+                const idnoValue = idnoCell ? idnoCell.textContent.toLowerCase() : '';
+                row.style.display = (searchValue === '' || idnoValue.includes(searchValue)) ? '' : 'none';
+                if (row.style.display === '') matches++;
             });
+            noResultsMessage.style.display = matches === 0 ? '' : 'none';
+        };
 
-            // Sort rows by exact match first, then by closeness
-            closenessArray.sort((a, b) => {
-                if (a.isExactMatch && !b.isExactMatch) return -1;
-                if (!a.isExactMatch && b.isExactMatch) return 1;
-                return a.closeness - b.closeness;
-            });
-
-            for (let i = 0; i < closenessArray.length; i++) {
-                const row = closenessArray[i].row;
-                const cells = row.getElementsByTagName('td');
-                let matchFound = false;
-
-                for (let j = 0; j < cells.length; j++) {
-                    const cell = cells[j];
-                    if (cell.textContent.toLowerCase().includes(searchValue)) {
-                        matchFound = true;
-                        break;
-                    }
-                }
-
-                if (matchFound) {
-                    row.style.display = '';
-                    matches++;
-                } else {
-                    row.style.display = 'none';
-                }
+        const validateSearch = () => {
+            const searchValue = searchBar.value.trim();
+            if (searchValue === '' || isNaN(searchValue)) {
+                alert('Only IDno can be searched. Please enter a valid ID number.');
+                searchBar.value = '';
+                return false;
             }
+            return true;
+        };
 
-            if (matches === 0) {
-                noResultsMessage.style.display = 'block';
-            } else {
-                noResultsMessage.style.display = 'none';
-            }
-        }
-
-        // Handle search button click
-        searchButton.addEventListener('click', function (event) {
+        searchButton.addEventListener('click', (event) => {
             event.preventDefault();
-            filterTable();
+            if (validateSearch()) filterByIdno();
         });
-
-        // Handle Enter key press in search bar
-        searchBar.addEventListener('keyup', function (event) {
-            if (event.key === 'Enter') {
-                filterTable();
-            }
+        searchBar.addEventListener('keyup', (event) => {
+            if (event.key === 'Enter' && validateSearch()) filterByIdno();
             if (searchBar.value === '') {
-                for (let i = 0; i < rows.length; i++) {
-                    rows[i].style.display = '';
-                }
+                rows.forEach(row => (row.style.display = ''));
                 noResultsMessage.style.display = 'none';
             }
         });
     } else {
         console.error('Table element not found');
     }
-});
 
-//For Cursor 
-
-document.addEventListener('DOMContentLoaded', () => {
+    // Cursor effect
     const cursor = document.querySelector('.cursor');
+    if (cursor) {
+        document.addEventListener('mousemove', e => {
+            cursor.style.top = `${e.pageY - 10}px`;
+            cursor.style.left = `${e.pageX - 10}px`;
+        });
 
-    document.addEventListener('mousemove', e => {
-        cursor.style.top = `${e.pageY - 10}px`;
-        cursor.style.left = `${e.pageX - 10}px`;
-    });
+        document.addEventListener('click', e => {
+            cursor.classList.add("expand");
+            setTimeout(() => cursor.classList.remove("expand"), 500);
 
-    document.addEventListener('click', e => {
-        cursor.classList.add("expand");
-
-        setTimeout(() => {
-            cursor.classList.remove("expand");
-        }, 500);
-        
-        setTimeout(() => {
             const ripple = document.createElement('div');
             ripple.classList.add('ripple');
-            const x = e.pageX;  
-            const y = e.pageY;  
             const size = 50;
             ripple.style.width = ripple.style.height = `${size}px`;
-            ripple.style.left = `${x - size / 2}px`;
-            ripple.style.top = `${y - size / 2}px`;
+            ripple.style.left = `${e.pageX - size / 2}px`;
+            ripple.style.top = `${e.pageY - size / 2}px`;
             document.body.appendChild(ripple);
-            ripple.addEventListener('animationend', () => {
-                ripple.remove();
-            });
-        }, 100); 
-    });
+            ripple.addEventListener('animationend', () => ripple.remove());
+        });
+    }
 });

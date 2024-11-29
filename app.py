@@ -128,6 +128,26 @@ def get_student(idno):
     except Exception as e:
         print(f"Error retrieving student data: {e}")
         return jsonify({"error": "An error occurred while retrieving the student data"}), 500
+    
+
+@app.route('/check_qr_code', methods=['POST'])
+def check_qr_code():
+    try:
+        data = request.get_json()
+        scanned_qr_code = data.get('scanned_qr_code')
+        
+        if not scanned_qr_code:
+            return jsonify({"error": "No QR code provided"}), 400
+
+        student_info = check_qrcode(scanned_qr_code)
+
+        if student_info:
+            student_info['image'] = url_for('static', filename=f'images/Register/{student_info["idno"]}.png') if os.path.exists(f'static/images/Register/{student_info["idno"]}.png') else url_for('static', filename='images/default.png')
+            return jsonify(student_info)
+        else:
+            return jsonify({"error": "Student not found"}), 404
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 @app.route('/delete_qr', methods=['POST'])
 def delete_qr():
