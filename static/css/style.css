@@ -798,10 +798,10 @@ html::-webkit-scrollbar-thumb
 
 
 .course-style {
-    padding: 2px 4px;
+    padding: 2px 5px;
     background: #8de02c; /* Default color, will be overridden by specific courses */
     color: #fff;
-    border-radius: 4px;
+    border-radius: 2px;
     font-size: 14px;
     font-weight: 500;
   }
