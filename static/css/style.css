@@ -540,23 +540,6 @@ html::-webkit-scrollbar-thumb
     display: none;
 }
 
-.ripple {
-    position: absolute;
-    border-radius: 50%;
-    transform: scale(0);
-    animation: ripple-animation 0.4s linear;
-    background-color: #2196F3;
-    pointer-events: none;
-    z-index: 12000; 
-}
-
-@keyframes ripple-animation {
-    to {
-        transform: scale(0.5);
-        opacity: 0;
-    }
-}
-
 @keyframes fadeSlideOut {
     0% {
         opacity: 1;
