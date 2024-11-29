@@ -796,6 +796,59 @@ html::-webkit-scrollbar-thumb
 }
 
 
+
+.course-style {
+    padding: 2px 4px;
+    background: #8de02c; /* Default color, will be overridden by specific courses */
+    color: #fff;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  
+  /* Specific background color for each course */
+.course-bsit {
+    background-color: #1a73e8;
+  }
+  
+  .course-bscpe {
+    background-color: #ff6f00; 
+  }
+  
+  .course-bscs {
+    background-color: #009688; 
+  }
+  
+  .course-bsba {
+    background-color: #e91e63;
+  }
+  
+  .course-bshm {
+    background-color: #9c27b0; 
+  }
+  
+  .course-bsee {
+    background-color: #3f51b5; 
+  }
+  
+  .course-bsece {
+    background-color: #00bcd4; 
+  }
+  
+  .course-bsagri {
+    background-color: #8bc34a; 
+  }
+  
+  .course-bspcy {
+    background-color: #673ab7; 
+  }
+  
+  .course-bsnurs {
+    background-color: #f44336; 
+  }
+
+
+
 @media (max-width: 1402px) {
     #menu-icon {
         display: block;  

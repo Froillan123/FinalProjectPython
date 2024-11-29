@@ -87,12 +87,20 @@ function getStudentData(idno) {
 
 
 function openEditModal(idno, lastname, firstname, course, level) {
-    // Set the values in the modal input fields
+    // Pre-fill the modal fields
     document.getElementById('edit-idno-view').value = idno;
     document.getElementById('edit-lastname-view').value = lastname;
     document.getElementById('edit-firstname-view').value = firstname;
-    document.getElementById('edit-course-view').value = course;
     document.getElementById('edit-level-view').value = level;
+
+    // Set the current course in the dropdown
+    const courseDropdown = document.getElementById('edit-course-view');
+    for (let i = 0; i < courseDropdown.options.length; i++) {
+        if (courseDropdown.options[i].value === course) {
+            courseDropdown.selectedIndex = i;
+            break;
+        }
+    }
 
     // Show the modal
     document.getElementById('editModal').style.display = 'flex';
