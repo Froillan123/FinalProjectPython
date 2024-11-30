@@ -52,7 +52,7 @@
                         <td class="w3-center level-{{ user['level'] }}" data-cell="LEVEL:">{{ user["level"] }}</td>
                         
                         <td class="w3-center" data-cell="ACTION:" style="display: flex; align-items: center; justify-content: center; gap: 1rem;">
-                            <button class="w3-button w3-amber edit-btn edit" onclick="openEditModal('{{ user['idno'] }}', '{{ user['lastname'] }}', '{{ user['firstname'] }}', '{{ user['course'] }}', '{{ user['level'] }}')">
+                            <button class="w3-button edit-btn edit" onclick="openEditModal('{{ user['idno'] }}', '{{ user['lastname'] }}', '{{ user['firstname'] }}', '{{ user['course'] }}', '{{ user['level'] }}')">
                                 <i class="fas fa-pen"></i>
                             </button>
                             <button class="w3-button w3-red delete-btn delete" onclick="openCustomAlert('{{ user['idno'] }}')">
@@ -140,6 +140,12 @@
                     <option value="BSAgri" class="option-bsagri">BSAgri</option>
                     <option value="BSPsy" class="option-bspcy">BSPsy</option>
                     <option value="BSNurs" class="option-bsnurs">BSNurs</option>
+                    <option value="BSCrim" class="option-bscrim">BSCrim</option>
+                    <option value="BSHRM" class="option-bshrm">BSHRM</option>
+                    <option value="BSArchitecture" class="option-bsarchitecture">BSArchitecture</option>
+                    <option value="BSChem" class="option-bschem">BSChem</option>
+                    <option value="BSEngineering" class="option-bsengineering">BSEngineering</option>
+                    <option value="BSPharmacy" class="option-bspharmacy">BSPharmacy</option>
                 </select>
             </p>
             <p>
