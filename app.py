@@ -150,7 +150,7 @@ def edit_student():
         updated = update_record('students', idno=idno, lastname=lastname, firstname=firstname, course=course, level=level)
 
         if updated:
-            flash('Student information updated successfully!', 'success')
+            flash('Student updated successfully!', 'success')
         else:
             flash('Error updating student information.', 'error')
 

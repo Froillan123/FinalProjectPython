@@ -129,18 +129,30 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-window.addEventListener('DOMContentLoaded', function() {
+window.addEventListener('DOMContentLoaded', function () {
     let element = document.getElementById('timestamp');
-    
+
     if (element) {
         function updateTime() {
             let date = new Date();
-
-            let formattedTime = date.toString(); 
             
+            // Check media width
+            let isSmallScreen = window.matchMedia('(max-width: 640px)').matches;
+
+            let formattedTime;
+            if (isSmallScreen) {
+                // Format: Only date and time
+                formattedTime = date.toLocaleString('en-US', { 
+                    dateStyle: 'medium', 
+                    timeStyle: 'medium' 
+                });
+            } else {
+                formattedTime = date.toString();
+            }
+
             element.textContent = formattedTime;
         }
-        
+
         updateTime();
         
         setInterval(updateTime, 1000);
@@ -148,4 +160,5 @@ window.addEventListener('DOMContentLoaded', function() {
         console.log("Element with id 'timestamp' not found");
     }
 });
+
 

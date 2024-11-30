@@ -91,7 +91,6 @@ function openEditModal(idno, lastname, firstname, course, level) {
     document.getElementById('edit-idno-view').value = idno;
     document.getElementById('edit-lastname-view').value = lastname;
     document.getElementById('edit-firstname-view').value = firstname;
-    document.getElementById('edit-level-view').value = level;
 
     // Set the current course in the dropdown
     const courseDropdown = document.getElementById('edit-course-view');
@@ -102,9 +101,19 @@ function openEditModal(idno, lastname, firstname, course, level) {
         }
     }
 
+    // Set the current level in the dropdown
+    const levelDropdown = document.getElementById('edit-level-view');
+    for (let i = 0; i < levelDropdown.options.length; i++) {
+        if (levelDropdown.options[i].value === level) {
+            levelDropdown.selectedIndex = i;
+            break;
+        }
+    }
+
     // Show the modal
     document.getElementById('editModal').style.display = 'flex';
 }
+
 function closeEditModal() {
     document.getElementById('editModal').style.display = 'none';
 }

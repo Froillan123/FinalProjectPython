@@ -1,9 +1,7 @@
 #dbhelper.py
 from sqlite3 import connect, Row
-import sqlite3
-import base64
 
-database = 'studentinfo.db'
+database:str = 'studentinfo.db'
 
 def postprocess(sql: str, params=()) -> bool:
     db = connect(database)
@@ -18,6 +16,7 @@ def postprocess(sql: str, params=()) -> bool:
     finally:
         cursor.close()
         db.close()
+        
 def get_student_by_id(idno: int) -> dict:
     sql = 'SELECT * FROM students WHERE idno = ?'
     student = getprocess(sql, (idno,))
@@ -69,7 +68,6 @@ def add_record(table: str, **kwargs) -> bool:
     return postprocess(sql, values)
 
 def update_record(table: str, **kwargs) -> bool:
-    # Extract the keys and values from kwargs
     keys = list(kwargs.keys())
     values = list(kwargs.values())
     fields = ", ".join([f"`{key}` = ?" for key in keys[1:]])  

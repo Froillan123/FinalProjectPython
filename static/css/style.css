@@ -611,7 +611,6 @@ html::-webkit-scrollbar-thumb
     border-collapse: collapse;
     margin-top: 10px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); 
-    border-radius: 8px; 
 }
 
 .styled-table th, .styled-table td {
@@ -621,14 +620,10 @@ html::-webkit-scrollbar-thumb
 .styled-table th {
     background-color: #2196F3; 
     color: white; 
-    border-bottom: 2px solid rgba(0, 0, 0, 0.2);
     font-weight: 600;
     text-transform: capitalize;
 }
 
-.styled-table tr {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-}
 
 .styled-table tr:hover {
     background-color: rgba(0, 0, 0, 0.05); 
