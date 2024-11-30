@@ -4,10 +4,14 @@
 {% endblock %}
 {% block content %}
 
+<style>
+    
+</style>
 
 <div id="timestamp"></div> 
 
-<div id="main_container" style="height: 100vh;">
+<div class="full container" style="min-height: 100vh;">
+<div id="main_container">
     <div class="w3-full" style="padding: 1rem 3%;">
 
         <!-- Wrapper for horizontal scrolling -->
@@ -16,8 +20,9 @@
                 <thead>
                     <tr id="tr1">
                         <th>IDno</th>
-                        <th>Lastname</th>
-                        <th>Firstname</th>
+                        <th class="w3-hide-small">Lastname</th>
+                        <th class="w3-hide-small">Firstname</th>
+                        <th class="w3-hide-medium w3-hide-large">Name</th> <!-- New Name column for smaller screens -->
                         <th>Course</th>
                         <th>Level</th>
                         <th class="w3-center">Action</th>
@@ -27,19 +32,23 @@
                     {% for user in users %}
                     <tr id="tr2">
                         <td class="w3-center" data-cell="IDNO:" id="idno">
-                            <a href="#" style="color: #2196F3; font-size: 1.1rem" onclick="viewStudent('{{ user['idno'] }}')">{{ user['idno'] }}</a>
+                            <a href="#" style="color: #2196F3; font-size: 1.5rem" onclick="viewStudent('{{ user['idno'] }}')">{{ user['idno'] }}</a>
                         </td>
                         
-                        <td class="w3-center" data-cell="LASTNAME:">{{ user["lastname"] }}</td>
-                        <td class="w3-center" data-cell="FIRSTNAME:">{{ user["firstname"] }}</td>
+                        <!-- Individual Lastname and Firstname columns -->
+                        <td class="w3-center w3-hide-small" data-cell="LASTNAME:">{{ user["lastname"] }}</td>
+                        <td class="w3-center w3-hide-small" data-cell="FIRSTNAME:">{{ user["firstname"] }}</td>
+            
+                        <!-- Combined Name column for small screens -->
+                        <td class="w3-center w3-hide-medium w3-hide-large" data-cell="NAME:">{{ user["lastname"] }}, {{ user["firstname"] }}</td>
+            
                         <td class="w3-center" data-cell="COURSE:">
                             <span class="course-style course-{{ user['course']|lower }}">
                                 {{ user["course"] }}
                             </span>
                         </td>
                         
-                        
-                        <!-- Apply class to the Level column based on the level value -->
+                        <!-- Level column with class based on level -->
                         <td class="w3-center level-{{ user['level'] }}" data-cell="LEVEL:">{{ user["level"] }}</td>
                         
                         <td class="w3-center" data-cell="ACTION:" style="display: flex; align-items: center; justify-content: center; gap: 1rem;">
@@ -57,7 +66,7 @@
         </div>
     </div>
 </div>
-
+</div>
 <div id="viewModal" class="view-modal" style="display: none;">
     <div class="view-modal-content w3-card-4">
         <div class="description" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid black; padding: 10px;">

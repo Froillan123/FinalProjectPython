@@ -2,15 +2,33 @@
 {% block content %}
 
 <style>
+    html, body {
+        height: 100%; /* Make html and body take full height */
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        min-height: 100vh; /* Ensure the body takes full viewport height */
+        display: flex;
+        flex-direction: column; /* Stack content vertically */
+    }
+
     #reader {
         width: 300px;
         height: 300px;
         margin: 0 auto;
     }
+
     .scanner-container {
         text-align: center;
         margin-top: 20px;
+        flex-grow: 1; /* Allow this container to grow and take available space */
+        display: flex;
+        flex-direction: column;
+        justify-content: center; /* Vertically center the content */
     }
+
     .result {
         margin-top: 10px;
     }
@@ -18,11 +36,11 @@
 
 <script src="https://unpkg.com/html5-qrcode/html5-qrcode.min.js"></script>
 
-
 <div class='w3-container w3-blue w3-margin-bottom'>
     <h3 class="w3-left w3-margin-left w3-margin-top" style="color: white;">{{ pagetitle }}</h3>
 </div>
 <div id="timestamp"></div> 
+<div>
 <div class="scanner-container">
     <h2>Scan QR Code</h2>
     <div id="reader"></div>
@@ -37,13 +55,13 @@
     const html5QrCode = new Html5Qrcode("reader");
 
     function onScanSuccess(decodedText) {
-    qrCodeResult.innerText = decodedText;
-
+        qrCodeResult.innerText = decodedText;
     }
 
     function onScanFailure(error) {
-      
+        // Handle scan failure (optional)
     }
+
     html5QrCode.start(
         { facingMode: "environment" }, 
         {
@@ -53,7 +71,7 @@
         onScanSuccess,
         onScanFailure
     ).catch(err => {
-    
+        // Handle any errors
     });
 </script>
 

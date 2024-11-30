@@ -1,9 +1,11 @@
 {% extends 'base.html' %}
 
 {% block content %}
-        <div class="login-container w3-animate-top">
-            <form method="POST" action="{{ url_for('login') }}" id="loginForm">
-                <h1 class="title">{{pagetitle}}</h1>
+        <div class="login-container">
+            <form method="POST" action="{{ url_for('login') }}" id="loginForm" class="w3-animate-top">
+                <div class="logintitle">
+                    <h1 class="title">{{pagetitle}}</h1>
+                </div>
                 <div class="input-container">
                     <input type="text" name="username" id="username" placeholder="Username">
                     <i class="fas fa-user icon user"></i>

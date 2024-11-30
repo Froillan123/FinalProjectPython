@@ -265,6 +265,7 @@ html::-webkit-scrollbar-thumb
     align-items: center;
     justify-content: center;
     min-height: 100vh;
+    background: url(../images/vg.png);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
@@ -277,7 +278,10 @@ html::-webkit-scrollbar-thumb
     color: #333;
     border-radius: 10px;
     padding: 30px 40px;
+    z-index: 500;
 }
+
+
 
 .title {
     font-size: 36px;
@@ -305,7 +309,7 @@ html::-webkit-scrollbar-thumb
     background: transparent;
     border: 2px solid rgba(0, 0, 0, 0.2);
     outline: none;
-    padding: 0.8rem;
+    padding: 1.3rem;
     border-radius: 4px;
     font-size: 16px;
     color: #333;
@@ -365,6 +369,7 @@ html::-webkit-scrollbar-thumb
     height: auto;
     margin-right: 10px; 
 }
+
 
 .pagetitle {
     margin-left: 20px;
@@ -473,6 +478,7 @@ html::-webkit-scrollbar-thumb
     transition: opacity 0.4s ease-in, transform 0.4s ease-in;
     gap: 1rem;
     padding: 0;
+    z-index: 1000;
 }
 
 
@@ -627,6 +633,7 @@ html::-webkit-scrollbar-thumb
 
 .styled-table tr:hover {
     background-color: rgba(0, 0, 0, 0.05); 
+    cursor: pointer;
 }
 
 
@@ -709,6 +716,77 @@ html::-webkit-scrollbar-thumb
     display: none;
     transition: transform 0.3s ease, color 0.3s ease;
 }
+
+
+
+
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 2rem 9%;
+    background: #2196F3; 
+}
+
+.footer-text p {
+    font-size: 1.6rem;
+    color: #fff;
+}
+
+.footer-iconTop a {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.8rem;
+    background: #fff; 
+    border-radius: 0.8rem;
+    transition: all 0.3s ease; 
+    text-decoration: none;
+    color: #1E3A8A; 
+}
+
+.footer-iconTop a i {
+    font-size: 2.4rem;
+    color: #1E3A8A; 
+}
+
+.footer-iconTop a:hover {
+    background: #FFD700; 
+    color: #1E3A8A; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px);
+}
+
+.social-media {
+    display: flex;
+    gap: 1rem; 
+    justify-content: center;
+    align-items: center;
+}
+
+.social-media a {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 45px;
+    height: 45px;
+    background: #fff; 
+    color: #2196F3; 
+    font-size: 2.4rem;
+    border-radius: 50%; 
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.social-media a:hover {
+    background: #FFD700; 
+    color: #1E3A8A; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+}
+
+
 
 @keyframes rotate {
     0% {
@@ -843,6 +921,11 @@ html::-webkit-scrollbar-thumb
   }
 
 
+  .w3-hide-medium.w3-hide-large {
+    word-wrap: break-word;
+    white-space: normal;
+}
+
 
 @media (max-width: 1402px) {
     #menu-icon {
@@ -871,7 +954,7 @@ html::-webkit-scrollbar-thumb
 
     .navbar a {
         display: block;
-        font-size: 1rem;  
+        font-size: 1.5rem;  
         text-align: left;
         margin: 1rem 0;
         padding: 1rem;
@@ -889,6 +972,15 @@ html::-webkit-scrollbar-thumb
 {
     .view-modal-content {
         width: 70%;
+    }
+    .styled-table-wrapper {
+        border-collapse: separate; 
+        table-layout: fixed; 
+        overflow-x: auto; 
+    }
+    .styled-table th, .styled-table td {
+        border: none;
+        font-size: 13px;
     }
 }
 
@@ -940,16 +1032,9 @@ html::-webkit-scrollbar-thumb
     {
         margin-right: 3px; 
     }
-    .styled-table-wrapper {
-        border-collapse: separate; 
-        table-layout: fixed; 
-        overflow-x: auto; 
-    }
-    .styled-table th, .styled-table td {
-        border: none;
-        font-size: 13px;
-    }
 }
+
+
 
 @media (max-width: 594px)
 {
@@ -1007,8 +1092,7 @@ html::-webkit-scrollbar-thumb
     }
     .login-container 
     {
-        min-height: auto;
-        margin-top: 3rem;
+        align-items: self-start;
     }
     #loginForm {
         width: 350px;
@@ -1017,6 +1101,8 @@ html::-webkit-scrollbar-thumb
         color: #333;
         border-radius: 10px;
         padding: 30px 40px;
+        align-items: self-start;
+        margin-top: 13rem;
     }
 
     .alert-content { 
@@ -1030,6 +1116,19 @@ html::-webkit-scrollbar-thumb
     #search-bar 
     {
         width: 200px;
+    }
+    .footer
+    {
+        flex-direction: column-reverse;
+    }
+    .footer p 
+    {
+        text-align: center;
+        margin-top: 2rem;
+    }
+    .footer-iconTop a
+    {
+        margin-bottom: 3rem;
     }
 }
 
