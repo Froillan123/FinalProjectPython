@@ -2,12 +2,7 @@
 {% block content %}
 
 <style>
-    html, body {
-        height: 100%; /* Make html and body take full height */
-        margin: 0;
-        padding: 0;
-    }
-
+   
     body {
         min-height: 100vh; /* Ensure the body takes full viewport height */
         display: flex;
@@ -40,7 +35,7 @@
     <h3 class="w3-left w3-margin-left w3-margin-top" style="color: white;">{{ pagetitle }}</h3>
 </div>
 <div id="timestamp"></div> 
-<div>
+<div style="min-height: 100vh;">
 <div class="scanner-container">
     <h2>Scan QR Code</h2>
     <div id="reader"></div>
