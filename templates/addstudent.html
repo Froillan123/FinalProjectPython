@@ -3,14 +3,20 @@
     {% include 'header.html' %}
 {% endblock %}
 {% block content %}
+<style>
+    .w3-container.form {
+    min-height: 100vh;
+    overflow-y: auto;
+}
+</style>
 
 <div id="timestamp"></div> 
 
-<div class="w3-row-padding" style="padding: 1rem 5%; min-height: 100vh;">
+<div class="w3-row-padding" style="padding: 1rem 5%;">
     <!-- Left Side -->
     <div class="w3-half">
-        <div class="w3-container w3-padding w3-round-small w3-card-2 form">
-            <form id="student_form" action="{{ url_for('add_student') }}" method="POST">
+        <div class="w3-container w3-padding w3-round-small w3-card-2 form" style="min-height: 100vh;">
+            <form id="student_form" action="{{ url_for('add_student') }}" method="POST" enctype="multipart/form-data">
                 <div id="my_camera" style="margin:auto;"></div>
                 <div class="switchcam">
                     <button class="w3-button w3-blue" type="button" onclick="toggleCamera()">Switch Camera</button>

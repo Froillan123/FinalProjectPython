@@ -13,6 +13,7 @@ app.config['SESSION_PERMANENT'] = False
 app.config['SESSION_FILE_DIR'] = os.path.join(app.instance_path, 'sessions')
 app.config['SECRET_KEY'] = 'Kimperor123'
 app.config['SESSION_REDIS'] = redis.StrictRedis(host='localhost', port=6379, db=0)
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 cache = Cache(app, config={'CACHE_TYPE': 'redis', 'CACHE_REDIS_URL': 'redis://localhost:6379/0'})
 REGISTER_DIR = 'static/images/Register'
 QRCODE_DIR = 'static/images/qrcode'
@@ -140,13 +141,9 @@ def edit_student():
         firstname = request.form.get('firstname')
         course = request.form.get('course')
         level = request.form.get('level')
-
-        # Ensure all the fields are present
         if not all([idno, lastname, firstname, course, level]):
             flash('All fields are required.', 'error')
             return redirect(url_for('student_list'))
-
-        # Update the student record in the database
         updated = update_record('students', idno=idno, lastname=lastname, firstname=firstname, course=course, level=level)
 
         if updated:
@@ -159,8 +156,6 @@ def edit_student():
         flash('Please log in first!', 'warning')
         return redirect(url_for('login'))
 
-
-    
 
 @app.route('/delete_qr', methods=['POST'])
 def delete_qr():

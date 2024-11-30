@@ -136,7 +136,6 @@ window.addEventListener('DOMContentLoaded', function () {
         function updateTime() {
             let date = new Date();
             
-            // Check media width
             let isSmallScreen = window.matchMedia('(max-width: 640px)').matches;
 
             let formattedTime;

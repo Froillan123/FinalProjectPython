@@ -1055,6 +1055,7 @@ html::-webkit-scrollbar-thumb
 
     }
     
+    
 }
 
 @media (max-width: 507px)
@@ -1143,6 +1144,7 @@ html::-webkit-scrollbar-thumb
     {
         margin-bottom: 3rem;
     }
+
 }
 
 @media (max-width: 378px)
