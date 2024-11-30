@@ -27,6 +27,83 @@
     .result {
         margin-top: 10px;
     }
+
+    .result {
+        background-color: #fff;
+        padding: 20px;
+        margin: 20px auto;
+        width: 50%;
+        border-radius: 10px; /* Rounded corners for the modal */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow around the modal */
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .result h3 {
+        font-size: 24px;
+        margin-bottom: 15px;
+        color: #333;
+    }
+
+    .image {
+        max-width: 100%;
+        height: auto;
+        border-radius: 10px; /* Apply rounded corners to the image */
+        margin-bottom: 20px;
+    }
+
+    .w3-table-all {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    .w3-table-all td {
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .w3-table-all td:first-child {
+        font-weight: bold;
+        color: #333;
+    }
+
+    .w3-table-all div {
+        color: #555;
+        word-wrap: break-word;
+    }
+
+    /* Optional: Add a border to the modal container */
+    .modal-content {
+        padding: 20px;
+        border-radius: 10px;
+        border: 1px solid #ddd;
+    }
+
+    /* Optional: Styling for the close button, if you want to add one */
+    .close-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background-color: #f44336;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        padding: 10px;
+        cursor: pointer;
+    }
+
+    .close-btn:hover {
+        background-color: #d32f2f;
+    }
+    @media (max-width: 470px)
+    {
+        .result
+        {
+            width: 90%;
+        }
+    }
 </style>
 
 <script src="https://unpkg.com/html5-qrcode/html5-qrcode.min.js"></script>
@@ -41,7 +118,7 @@
         <div id="reader"></div>
         <div class="result">
             <h3>Scanned Data:</h3>
-            <!-- <p id="qr-result">No data scanned yet.</p> -->
+            <img id="image-view" class="image" />
             <table class="w3-table-all w3-margin-top">
                 <tr><td>IDNO</td><td><div id="qr-result"></div></td></tr>
                 <tr><td>LASTNAME</td><td><div id="display_lastname"></div></td></tr>
@@ -95,6 +172,8 @@
             document.getElementById('display_firstname').innerText = data.firstname || 'N/A';
             document.getElementById('display_course').innerText = data.course || 'N/A';
             document.getElementById('display_level').innerText = data.level || 'N/A';
+            const imageView = document.getElementById('image-view');
+            imageView.src = data.image || '';  // Set the image source
         }
     })
     .catch(error => {

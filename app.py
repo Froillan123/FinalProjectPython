@@ -129,11 +129,14 @@ def get_student(idno):
         return jsonify({"error": "An error occurred while retrieving the student data"}), 500
     
 
+import os
+from flask import url_for, jsonify
+
 @app.route('/get_student_info', methods=['POST'])
 def get_student_info():
     data = request.get_json()
     idno = data.get('idno')
-    
+
     # Ensure get_user returns a dictionary or a single record
     student = get_user(idno)  # Retrieve the student by IDNO using your database helper
 
@@ -141,15 +144,36 @@ def get_student_info():
         student = student[0] if student else None  # If a list is returned, take the first item
 
     if student:
-        student_info = {
-            'lastname': student['lastname'],
-            'firstname': student['firstname'],
-            'course': student['course'],
-            'level': student['level']
-        }
+        # Define the image path for the student's image
+        image_path = os.path.join('static', 'images', 'Register', f"{student['idno']}.png")
+        
+        # Check if the image exists in the filesystem
+        if os.path.exists(image_path):
+            # If the image exists, use the image path
+            student_info = {
+                'lastname': student['lastname'],
+                'firstname': student['firstname'],
+                'course': student['course'],
+                'level': student['level'],
+                'image': url_for('static', filename=f'images/Register/{student["idno"]}.png')
+            }
+        else:
+            # If the image does not exist, fall back to the default image
+            student_info = {
+                'lastname': student['lastname'],
+                'firstname': student['firstname'],
+                'course': student['course'],
+                'level': student['level'],
+                'image': url_for('static', filename='images/default.png')  # Default image path
+            }
+
         return jsonify(student_info)
     else:
         return jsonify({'error': 'Student not found'}), 404
+
+
+
+
 
 
     
@@ -170,7 +194,7 @@ def edit_student():
         updated = update_record('students', idno=idno, lastname=lastname, firstname=firstname, course=course, level=level)
 
         if updated:
-            qr_data = {'idno': idno}
+            qr_data = idno
             qr_data_str = str(qr_data)
             qr_path = os.path.join(QRCODE_DIR, f"{idno}.png")
             qr = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=10, border=4)
