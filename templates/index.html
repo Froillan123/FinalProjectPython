@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
+
 {% block content %}
 
 <style>
-   
     body {
         min-height: 100vh; /* Ensure the body takes full viewport height */
         display: flex;
@@ -34,16 +34,23 @@
 <div class='w3-container w3-blue w3-margin-bottom'>
     <h3 class="w3-left w3-margin-left w3-margin-top" style="color: white;">{{ pagetitle }}</h3>
 </div>
-<div id="timestamp"></div> 
+<div id="timestamp"></div>
 <div style="min-height: 100vh;">
-<div class="scanner-container">
-    <h2>Scan QR Code</h2>
-    <div id="reader"></div>
-    <div class="result">
-        <h3>Scanned Data:</h3>
-        <p id="qr-result">No data scanned yet.</p>
+    <div class="scanner-container">
+        <h2>Scan QR Code</h2>
+        <div id="reader"></div>
+        <div class="result">
+            <h3>Scanned Data:</h3>
+            <!-- <p id="qr-result">No data scanned yet.</p> -->
+            <table class="w3-table-all w3-margin-top">
+                <tr><td>IDNO</td><td><div id="qr-result"></div></td></tr>
+                <tr><td>LASTNAME</td><td><div id="display_lastname"></div></td></tr>
+                <tr><td>FIRSTNAME</td><td><div id="display_firstname"></div></td></tr>
+                <tr><td>COURSE</td><td><div id="display_course"></div></td></tr>
+                <tr><td>LEVEL</td><td><div id="display_level"></div></td></tr>
+            </table>
+        </div>
     </div>
-</div>
 
 <script>
     const qrCodeResult = document.getElementById('qr-result');
@@ -51,6 +58,7 @@
 
     function onScanSuccess(decodedText) {
         qrCodeResult.innerText = decodedText;
+        fetchStudentData(decodedText); // Make a request to get student data using the decoded `idno`
     }
 
     function onScanFailure(error) {
@@ -58,16 +66,42 @@
     }
 
     html5QrCode.start(
-        { facingMode: "environment" }, 
+        { facingMode: "environment" },
         {
-            fps: 10, 
-            qrbox: { width: 250, height: 250 } 
+            fps: 10,
+            qrbox: { width: 250, height: 250 }
         },
         onScanSuccess,
         onScanFailure
     ).catch(err => {
-        // Handle any errors
+        console.error('Error starting QR code scanner:', err);
     });
+
+    // Function to fetch student data from the server
+    function fetchStudentData(idno) {
+    fetch('/get_student_info', {  // Ensure this is a POST request
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ idno: idno })  // Sending the idno in the body
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            alert('Error: ' + data.error);
+        } else {
+            document.getElementById('display_lastname').innerText = data.lastname || 'N/A';
+            document.getElementById('display_firstname').innerText = data.firstname || 'N/A';
+            document.getElementById('display_course').innerText = data.course || 'N/A';
+            document.getElementById('display_level').innerText = data.level || 'N/A';
+        }
+    })
+    .catch(error => {
+        console.error('Error fetching student data:', error);
+    });
+}
+
 </script>
 
 {% endblock %}
