@@ -141,12 +141,23 @@ def edit_student():
         firstname = request.form.get('firstname')
         course = request.form.get('course')
         level = request.form.get('level')
+
         if not all([idno, lastname, firstname, course, level]):
             flash('All fields are required.', 'error')
             return redirect(url_for('student_list'))
+
         updated = update_record('students', idno=idno, lastname=lastname, firstname=firstname, course=course, level=level)
 
         if updated:
+            qr_data = {'idno': idno, 'lastname': lastname, 'firstname': firstname, 'course': course, 'level': level}
+            qr_data_str = str(qr_data)
+            qr_path = os.path.join(QRCODE_DIR, f"{idno}.png")
+            qr = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=10, border=4)
+            qr.add_data(qr_data_str)
+            qr.make(fit=True)
+            img = qr.make_image(fill='black', back_color='white')
+            img.save(qr_path)
+
             flash('Student updated successfully!', 'success')
         else:
             flash('Error updating student information.', 'error')
@@ -155,6 +166,7 @@ def edit_student():
     else:
         flash('Please log in first!', 'warning')
         return redirect(url_for('login'))
+
 
 
 @app.route('/delete_qr', methods=['POST'])
