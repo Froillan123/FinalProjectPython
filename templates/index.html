@@ -162,27 +162,26 @@
     const qrCodeResult = document.getElementById('qr-result');
     const html5QrCode = new Html5Qrcode("reader");
 
-    let isScanning = false; // Flag to track if scanning is in progress
-    const scanDelay = 3000; // Delay between scans in milliseconds (3 seconds)
+    let isScanning = false; 
+    const scanDelay = 3000; 
 
     function onScanSuccess(decodedText) {
         if (isScanning) {
-            return; // If a scan is already in progress, do not proceed
+            return; 
         }
 
-        isScanning = true; // Set scanning flag to true
+        isScanning = true; 
 
         qrCodeResult.innerText = decodedText;
-        fetchStudentData(decodedText); // Make a request to get student data using the decoded `idno`
+        fetchStudentData(decodedText);
 
-        // Reset the flag after the delay (3 seconds)
         setTimeout(() => {
             isScanning = false;
         }, scanDelay);
     }
 
     function onScanFailure(error) {
-        // Optionally, log or handle the error here
+        
     }
 
     html5QrCode.start(
@@ -207,7 +206,6 @@
         })
         .then(response => {
             if (response.status === 404) {
-                // If a flash message is returned, refresh the page to display it
                 window.location.reload();
             } else {
                 return response.json();

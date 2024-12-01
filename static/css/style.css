@@ -927,7 +927,7 @@ html::-webkit-scrollbar-thumb
 }
 
 .course-bscrim {
-    background-color: #ff5722;  
+    background-color: #6e2711;  
 }
 
 .course-bshrm {
@@ -939,17 +939,22 @@ html::-webkit-scrollbar-thumb
 }
 
 .course-bschem {
-    background-color: #9c27b0; 
+    background-color: #010b5f; 
 }
 
 .course-bsengineering {
-    background-color: #2196f3;
+    background-color: #000000;
 }
 
 .course-bspharmacy {
-    background-color: #795548;  
+    background-color: #910d75;  
 }
-
+.readonly-input {
+    background-color: #f0f0f0; /* Light grey background */
+    color: #666; /* Darker text color for better contrast */
+    border: 1px solid #ccc; /* Light border color */
+    cursor: not-allowed; /* Optional: indicates that the field is non-editable */
+}
 
 
   .w3-hide-medium.w3-hide-large {
@@ -961,7 +966,7 @@ html::-webkit-scrollbar-thumb
 .details {
     position: relative;
     width: 100%;
-    padding: 20px;
+    padding: 3rem 5%;
 }
 
 .details .attendancecard {

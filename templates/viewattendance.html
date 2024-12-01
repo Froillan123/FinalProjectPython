@@ -29,7 +29,11 @@
                             <td>{{ record.idno }}</td>
                             <td>{{ record.lastname }}</td>
                             <td>{{ record.firstname }}</td>
-                            <td>{{ record.course }}</td>
+                            <td class="w3-center" data-cell="COURSE:">
+                                <span class="course-style course-{{ record['course']|lower }}">
+                                    {{ record.course }}
+                                </span>
+                            </td>
                             <td>{{ record.level }}</td>
                             <td>{{ record.time_attended }}</td>
                         </tr>

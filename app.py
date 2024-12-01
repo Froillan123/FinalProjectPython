@@ -5,7 +5,6 @@ import qrcode
 import os
 import redis
 from flask_caching import Cache
-from datetime import datetime
 
 
 
@@ -168,7 +167,7 @@ def get_student_info():
         flash('Student not found.', 'error')
         return jsonify({'flash': True}), 404
     
-    
+
 @app.route('/edit_student', methods=['POST'])
 def edit_student():
     if 'username' in session:
@@ -177,10 +176,10 @@ def edit_student():
         firstname = request.form.get('firstname')
         course = request.form.get('course')
         level = request.form.get('level')
+
         if not all([idno, lastname, firstname, course, level]):
             flash('All fields are required.', 'error')
             return redirect(url_for('student_list'))
-
         updated = update_record('students', idno=idno, lastname=lastname, firstname=firstname, course=course, level=level)
 
         if updated:
@@ -192,8 +191,6 @@ def edit_student():
     else:
         flash('Please log in first!', 'warning')
         return redirect(url_for('login'))
-
-
 
 
 @app.route('/delete_qr', methods=['POST'])
@@ -309,7 +306,7 @@ def get_users() -> object:
     return getall_records('students')
 
 def get_user(idno: str) -> object:
-    return getone_record('students', idno=idno)
+    return get_student_by_id(idno)
 
 if __name__ == '__main__':
     app.run(debug=True)
