@@ -92,8 +92,7 @@ def viewstudent():
     else:
         flash("Please log in first!", "warning")
         return redirect(url_for('login'))
-
-
+    
 @app.route('/generate_qr', methods=['POST'])
 def generate_qr():
     try:
@@ -167,10 +166,35 @@ def edit_student():
         firstname = request.form.get('firstname')
         course = request.form.get('course')
         level = request.form.get('level')
+        image_data = request.form.get('image_data')  # New image data (if provided)
 
         if not all([idno, lastname, firstname, course, level]):
             flash('All fields are required.', 'error')
             return redirect(url_for('student_list'))
+
+        # If new image data is provided
+        if image_data:
+            try:
+                # Decode the new image data
+                image_data = image_data.split(',')[1]
+                decoded_image = base64.b64decode(image_data)
+
+                # Define the file path for the profile image
+                image_filename = os.path.join(REGISTER_DIR, f"{idno}.png")
+
+                # Delete the old image if it exists
+                if os.path.exists(image_filename):
+                    os.remove(image_filename)
+
+                # Save the new image
+                with open(image_filename, 'wb') as img_file:
+                    img_file.write(decoded_image)
+
+            except Exception as e:
+                flash(f"Error processing image: {e}", 'error')
+                return redirect(url_for('student_list'))
+
+        # Update student information in the database
         updated = update_record('students', idno=idno, lastname=lastname, firstname=firstname, course=course, level=level)
 
         if updated:
@@ -182,6 +206,7 @@ def edit_student():
     else:
         flash('Please log in first!', 'warning')
         return redirect(url_for('login'))
+
 
 
 @app.route('/delete_qr', methods=['POST'])
@@ -269,17 +294,22 @@ def add_student():
 
 @app.route('/delete_user', methods=['POST'])
 def delete_user():
-    idno = request.form['idno']  
-    student = get_user(idno)[0]
+    idno = request.form['idno']
+    student = get_user(idno)  # This will be None if not found
+    
+    if not student:
+        flash("User not found", 'error')
+        return redirect(url_for('student_list'))
+
     imagename = student['image']
     qrcode_path = student['qrcode']
 
-    ok = delete_record('students', idno=idno)  
+    ok = delete_record('students', idno=idno)
 
     if ok:
-        flash("User deleted successfully!", 'delete-success')  
+        flash("User deleted successfully!", 'delete-success')
     else:
-        flash("Deleting User: Something went wrong", 'error')  
+        flash("Deleting User: Something went wrong", 'error')
 
     try:
         if os.path.exists(imagename):  
@@ -290,7 +320,7 @@ def delete_user():
         flash("Error within '/delete_user': File path error", 'error')
         print(e)
 
-    return redirect(url_for('student_list'))  
+    return redirect(url_for('student_list'))
 
 
 def get_users() -> object:

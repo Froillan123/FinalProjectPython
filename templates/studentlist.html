@@ -3,7 +3,12 @@
     {% include 'header.html' %}
 {% endblock %}
 {% block content %}
-
+<style>
+    
+    #my_camera {
+    z-index: 1; /* Ensure it doesn't overlap */
+}
+</style>
 
 <div id="timestamp"></div> 
 
@@ -17,9 +22,8 @@
                 <thead>
                     <tr id="tr1">
                         <th>IDno</th>
-                        <th class="w3-hide-small">Lastname</th>
-                        <th class="w3-hide-small">Firstname</th>
-                        <th class="w3-hide-medium w3-hide-large">Name</th> <!-- New Name column for smaller screens -->
+                        <th>Lastname</th>
+                        <th>Firstname</th>
                         <th>Course</th>
                         <th>Level</th>
                         <th class="w3-center">Action</th>
@@ -33,11 +37,9 @@
                         </td>
                         
                         <!-- Individual Lastname and Firstname columns -->
-                        <td class="w3-center w3-hide-small" data-cell="LASTNAME:">{{ user["lastname"] }}</td>
-                        <td class="w3-center w3-hide-small" data-cell="FIRSTNAME:">{{ user["firstname"] }}</td>
+                        <td class="w3-center " data-cell="LASTNAME:">{{ user["lastname"] }}</td>
+                        <td class="w3-center " data-cell="FIRSTNAME:">{{ user["firstname"] }}</td>
             
-                        <!-- Combined Name column for small screens -->
-                        <td class="w3-center w3-hide-medium w3-hide-large" data-cell="NAME:">{{ user["lastname"] }}, {{ user["firstname"] }}</td>
             
                         <td class="w3-center" data-cell="COURSE:">
                             <span class="course-style course-{{ user['course']|lower }}">
@@ -75,8 +77,9 @@
         <p class="w3-center w3-padding">
             <div class="view-image">
                 <img id="image-view" class="image" />
-                <img id="qr-view" class="image" />
-            </div>
+                <img id="qr-view" class="image" title="Click to download QR Code" />
+                <a id="hidden-download-link" href="/static/images/qrcode/QRCode.png" download="QRCode.png"></a>
+            </div>            
         </p>
         <form method="post" action="/addstudent" enctype="multipart/form-data">
             <input type="hidden" name="flag" id="flag" value="0"> 
@@ -112,7 +115,13 @@
             <p style="text-align: center; flex-grow: 1; margin: 0; color: #2196F3; font-size: 18px;">Edit Student</p>
             <i class="fas fa-times w3-right" onclick="closeEditModal()" style="cursor: pointer; font-size: 25px; margin-top: -0.9rem; color: red;"></i>
         </div>
-        <form method="post" action="/edit_student" enctype="multipart/form-data">
+        <form id="editStudentForm" method="post" action="/edit_student" enctype="multipart/form-data">
+            <div>
+                <div id="my_camera" style="margin:auto;"></div>
+                <div class="switchcam">
+                    <button class="w3-button w3-blue" type="button" onclick="toggleCamera()">Switch Camera</button>
+                </div>
+            </div>
             <p>
                 <label><b>IDNO</b></label>
                 <input type="text" id="edit-idno-view" name="idno" class="w3-input" readonly>
@@ -157,7 +166,8 @@
                     <option value="4">4</option>
                 </select>
             </p>
-            <button type="submit" class="w3-button w3-blue">Save Changes</button>
+            <button type="button" class="w3-button w3-blue" onclick="captureAndSubmit()">Save Changes</button>
+            <input type="hidden" name="image_data" id="image_data">
         </form>
     </div>
 </div>
@@ -178,4 +188,63 @@
 </div>
 
 <script src="{{ url_for('static', filename='js/studentlist.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/webcamjs@1.0.26/webcam.min.js"></script>
+<script>
+   let isFrontCamera = true;
+
+// Configure the webcam
+Webcam.set({
+    width: 300,
+    height: 250,
+    image_format: 'jpeg',
+    fps: 60,
+    flip_horiz: true,
+    png_quality: 90,
+    constraints: {
+        facingMode: isFrontCamera ? 'user' : 'environment'
+    }
+});
+
+// Attach the webcam to the div
+Webcam.attach('#my_camera');
+
+// Toggle between front and back cameras
+function toggleCamera() {
+    isFrontCamera = !isFrontCamera;
+    Webcam.reset();
+    Webcam.set({
+        constraints: {
+            facingMode: isFrontCamera ? 'user' : 'environment'
+        }
+    });
+    Webcam.attach('#my_camera');
+}
+
+// Capture image and submit the form
+function captureAndSubmit() {
+    // Capture the image from the webcam
+    Webcam.snap(function(data_uri) {
+        // Set the captured image data to the hidden input field
+        document.getElementById('image_data').value = data_uri;
+
+        // Submit the form
+        const form = document.getElementById('editStudentForm');
+        form.submit();
+    });
+}
+const qrImage = document.getElementById('qr-view');
+const tooltip = document.getElementById('tooltip');
+
+qrImage.addEventListener('mouseover', (e) => {
+    tooltip.style.left = e.pageX + 'px';
+    tooltip.style.top = e.pageY + 'px';
+    tooltip.style.visibility = 'visible';
+    tooltip.style.opacity = '1';
+});
+
+qrImage.addEventListener('mouseout', () => {
+    tooltip.style.visibility = 'hidden';
+    tooltip.style.opacity = '0';
+});
+</script>
 {% endblock %}

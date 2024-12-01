@@ -582,7 +582,7 @@ html::-webkit-scrollbar-thumb
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1000; 
+    z-index: 9999; 
 }
 
 .alert-content {
@@ -1038,11 +1038,34 @@ html::-webkit-scrollbar-thumb
 .details .attendancecard table tr td:nth-child(6) {
     text-align: center;
 }
+.view-image img {
+    cursor: pointer; /* Makes all images in this div clickable */
+}
+#hidden-download-link {
+    display: none; /* Keeps the download link hidden */
+}
 
+.tooltip {
+    position: absolute;
+    background-color: #333;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0.2s, opacity 0.2s;
+}
 
-  
-
-
+.tooltip-trigger:hover + #tooltip {
+    visibility: visible;
+    opacity: 1;
+}
+.sort-dropdown {
+    margin-left: auto;
+    padding: 5px 10px;
+    font-size: 14px;
+}
 
 
 @media (max-width: 1402px) {
@@ -1053,8 +1076,8 @@ html::-webkit-scrollbar-thumb
     .navbar {
         position: absolute;
         top: 100%;
-        width: 100%;
-        left: 0;
+        min-width: 240px;
+        right: 0;
         padding: 0.6rem 1%;
         display: none; 
         z-index: 10;
@@ -1171,6 +1194,10 @@ html::-webkit-scrollbar-thumb
     .details .attendancecard table tr td {
         word-wrap: break-word; /* Break long words to fit inside the cell */
     }
+    .cardHeader
+    {
+        flex-direction: column;
+    }
 }
 
 @media (max-width: 594px)
@@ -1209,10 +1236,6 @@ html::-webkit-scrollbar-thumb
     #logout 
     {
         display: none;
-    }
-    .navbar {
-        left: 50%;
-        width: 50%;
     }
     .navbar a 
     {

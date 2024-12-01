@@ -11,6 +11,13 @@
         <div class="attendancecard">
             <div class="cardHeader">
                 <h2>Attendance Records</h2>
+                <select id="sortDropdown" class="sort-dropdown">
+                    <option value="time_attended">Sort by Time Attended</option>
+                    <option value="lastname">Sort by Lastname</option>
+                    <option value="firstname">Sort by Firstname</option>
+                    <option value="course">Sort by Course</option>
+                    <option value="level">Sort by Level</option>
+                </select>
             </div>
             <table class="attendanceTable">
                 <thead>
@@ -43,4 +50,42 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const table = document.querySelector('.attendanceTable tbody');
+        const dropdown = document.getElementById('sortDropdown');
+
+        dropdown.addEventListener('change', () => {
+            const rows = Array.from(table.rows);
+            const sortKey = dropdown.value;
+
+            rows.sort((a, b) => {
+                const cellA = a.querySelector(`td[data-cell="${sortKey.toUpperCase()}"]`) || a.querySelector(`td:nth-child(${getColumnIndex(sortKey)})`);
+                const cellB = b.querySelector(`td[data-cell="${sortKey.toUpperCase()}"]`) || b.querySelector(`td:nth-child(${getColumnIndex(sortKey)})`);
+
+                if (sortKey === 'time_attended') {
+                    return new Date(cellA.textContent) - new Date(cellB.textContent);
+                }
+
+                return cellA.textContent.localeCompare(cellB.textContent);
+            });
+
+            table.innerHTML = '';
+            rows.forEach(row => table.appendChild(row));
+        });
+
+        function getColumnIndex(key) {
+            const headers = {
+                idno: 1,
+                lastname: 2,
+                firstname: 3,
+                course: 4,
+                level: 5,
+                time_attended: 6,
+            };
+            return headers[key];
+        }
+    });
+</script>
 {% endblock %}
