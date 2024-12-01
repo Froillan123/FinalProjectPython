@@ -80,3 +80,10 @@ def delete_record(table: str, **kwargs) -> bool:
     values = list(kwargs.values())
     sql = f"DELETE FROM `{table}` WHERE `{keys[0]}` = ?"
     return postprocess(sql, (values[0],))
+
+
+
+def get_student_by_id(idno: str) -> dict:
+    sql = 'SELECT * FROM students WHERE idno = ?'
+    student = getprocess(sql, (idno,))
+    return student[0] if student else None

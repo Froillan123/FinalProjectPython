@@ -129,15 +129,11 @@ def get_student(idno):
         return jsonify({"error": "An error occurred while retrieving the student data"}), 500
     
 
-import os
-from flask import url_for, jsonify
-
 @app.route('/get_student_info', methods=['POST'])
 def get_student_info():
     data = request.get_json()
     idno = data.get('idno')
 
-    # Ensure get_user returns a dictionary or a single record
     student = get_user(idno)  # Retrieve the student by IDNO using your database helper
 
     if isinstance(student, list):
@@ -169,14 +165,10 @@ def get_student_info():
 
         return jsonify(student_info)
     else:
-        return jsonify({'error': 'Student not found'}), 404
+        flash('Student not found.', 'error')
+        return jsonify({'flash': True}), 404
 
 
-
-
-
-
-    
 
 @app.route('/edit_student', methods=['POST'])
 def edit_student():
@@ -187,22 +179,15 @@ def edit_student():
         course = request.form.get('course')
         level = request.form.get('level')
 
+        # Check if all required fields are filled
         if not all([idno, lastname, firstname, course, level]):
             flash('All fields are required.', 'error')
             return redirect(url_for('student_list'))
 
+        # Update the student record
         updated = update_record('students', idno=idno, lastname=lastname, firstname=firstname, course=course, level=level)
 
         if updated:
-            qr_data = idno
-            qr_data_str = str(qr_data)
-            qr_path = os.path.join(QRCODE_DIR, f"{idno}.png")
-            qr = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=10, border=4)
-            qr.add_data(qr_data_str)
-            qr.make(fit=True)
-            img = qr.make_image(fill='black', back_color='white')
-            img.save(qr_path)
-
             flash('Student updated successfully!', 'success')
         else:
             flash('Error updating student information.', 'error')
@@ -211,6 +196,7 @@ def edit_student():
     else:
         flash('Please log in first!', 'warning')
         return redirect(url_for('login'))
+
 
 
 
