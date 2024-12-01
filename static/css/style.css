@@ -1254,6 +1254,7 @@ html::-webkit-scrollbar-thumb
     .login-container 
     {
         align-items: self-start;
+        background: none;
     }
     #loginForm {
         width: 350px;
