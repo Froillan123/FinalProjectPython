@@ -144,28 +144,19 @@ def get_student_info():
     if student:
         insert_attendance(student)
         image_path = os.path.join('static', 'images', 'Register', f"{student['idno']}.png")
-        if os.path.exists(image_path):
-            student_info = {
-                'lastname': student['lastname'],
-                'firstname': student['firstname'],
-                'course': student['course'],
-                'level': student['level'],
-                'image': url_for('static', filename=f'images/Register/{student["idno"]}.png')
-            }
-        else:
-            student_info = {
-                'lastname': student['lastname'],
-                'firstname': student['firstname'],
-                'course': student['course'],
-                'level': student['level'],
-                'image': url_for('static', filename='images/default.png')
-            }
-
+        student_info = {
+            'lastname': student['lastname'],
+            'firstname': student['firstname'],
+            'course': student['course'],
+            'level': student['level'],
+            'image': url_for('static', filename=f'images/Register/{student["idno"]}.png') if os.path.exists(image_path)
+            else url_for('static', filename='images/default.png')
+        }
         return jsonify(student_info)
 
     else:
-        flash('Student not found.', 'error')
-        return jsonify({'flash': True}), 404
+        return jsonify({'redirect': url_for('index')}), 404
+
     
 
 @app.route('/edit_student', methods=['POST'])

@@ -797,32 +797,31 @@ html::-webkit-scrollbar-thumb
 @keyframes rotate {
     0% {
         transform: rotate(0deg);
-        color: #3a3a3a; /* Default color */
+        color: #3a3a3a; 
     }
     100% {
         transform: rotate(180deg);
-        color: #2196F3; /* Blue color */
+        color: #2196F3; 
     }
 }
 
-/* Reverse rotation and reset the color to default */
+
 @keyframes rotateReverse {
     0% {
         transform: rotate(180deg);
-        color: #2196F3; /* Blue color */
+        color: #2196F3; 
     }
     100% {
         transform: rotate(0deg);
-        color: #3a3a3a; /* Default color */
+        color: #3a3a3a; 
     }
 }
 
-/* Apply the forward rotation animation */
 #menu-icon.rotated {
     animation: rotate 0.3s forwards;
 }
 
-/* Apply the reverse rotation animation */
+
 #menu-icon.rotated-reverse {
     animation: rotateReverse 0.3s forwards;
 }
@@ -950,10 +949,10 @@ html::-webkit-scrollbar-thumb
     background-color: #910d75;  
 }
 .readonly-input {
-    background-color: #f0f0f0; /* Light grey background */
-    color: #666; /* Darker text color for better contrast */
-    border: 1px solid #ccc; /* Light border color */
-    cursor: not-allowed; /* Optional: indicates that the field is non-editable */
+    background-color: #f0f0f0;
+    color: #666; 
+    border: 1px solid #ccc;
+    cursor: not-allowed; 
 }
 
 

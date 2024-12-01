@@ -3,13 +3,13 @@
 
 <style>
     body {
-        min-height: 100vh; /* Ensure the body takes full viewport height */
+        min-height: 100vh;
         display: flex;
-        flex-direction: column; /* Stack content vertically */
+        flex-direction: column; 
     }
 
     #reader {
-        width: 300px;
+        width: 400px;
         height: 300px;
         margin: 0 auto;
     }
@@ -17,10 +17,10 @@
     .scanner-container {
         text-align: center;
         margin-top: 20px;
-        flex-grow: 1; /* Allow this container to grow and take available space */
+        flex-grow: 1; 
         display: flex;
         flex-direction: column;
-        justify-content: center; /* Vertically center the content */
+        justify-content: center;
     }
 
     .result {
@@ -31,8 +31,8 @@
         padding: 20px;
         margin: 20px auto;
         width: 35%;
-        border-radius: 10px; /* Rounded corners for the modal */
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Light shadow around the modal */
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
         text-align: center;
         position: relative;
         overflow: hidden;
@@ -48,13 +48,11 @@
     .image {
         max-width: 100%;
         height: auto;
-        border-radius: 10px; /* Apply rounded corners to the image */
+        border-radius: 10px; 
         margin-bottom: 20px;
     }
 
    
-
-    /* Optional: Add a border to the modal container */
     .modal-content {
         padding: 20px;
         border-radius: 10px;
@@ -72,7 +70,7 @@
                     }
                 
                     .display_information tr:hover {
-                        background-color: #f1f1f1; /* Light background on row hover */
+                        background-color: #f1f1f1; 
                     }
                 
                     .display_information td, .display_information th {
@@ -81,8 +79,6 @@
                         color: #333;
                     }
                 
-                
-                    /* Mobile responsiveness */
                     @media (max-width: 470px) {
                         .display_information td,
                         .display_information th {
@@ -96,15 +92,17 @@
         {
             width: 90%;
         }
-        #reader
-        {
-            width: 90%;
-        }
+        #reader {
+        width: 300px;
+        height: 300px;
+        margin: 0 auto;
+    }
     }
 </style>
 
 <script src="https://unpkg.com/html5-qrcode/html5-qrcode.min.js"></script>
 <div class="home" id="home"></div>
+
 <div class='w3-container w3-blue w3-margin-bottom'>
     <h3 class="w3-left w3-margin-left w3-margin-top" style="color: white;">{{ pagetitle }}</h3>
 </div>
@@ -164,6 +162,7 @@
 
     let isScanning = false; 
     const scanDelay = 3000; 
+    let scanCount = 0; // Counter for successful scans
 
     function onScanSuccess(decodedText) {
         if (isScanning) {
@@ -171,9 +170,14 @@
         }
 
         isScanning = true; 
+        scanCount++; // Increment scan counter
 
         qrCodeResult.innerText = decodedText;
         fetchStudentData(decodedText);
+
+        // Update scan count display
+        const timestampDiv = document.getElementById('timestamp');
+        timestampDiv.innerHTML = `<p>Total Scans: ${scanCount}</p>`;
 
         setTimeout(() => {
             isScanning = false;
@@ -181,7 +185,7 @@
     }
 
     function onScanFailure(error) {
-        
+        // Handle scan failure if needed
     }
 
     html5QrCode.start(
@@ -195,36 +199,40 @@
     ).catch(err => {
         console.error('Error starting QR code scanner:', err);
     });
-
     function fetchStudentData(idno) {
-        fetch('/get_student_info', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ idno: idno }) // Sending the idno in the body
-        })
-        .then(response => {
-            if (response.status === 404) {
-                window.location.reload();
-            } else {
-                return response.json();
-            }
-        })
-        .then(data => {
-            if (data && !data.flash) {
-                document.getElementById('display_lastname').innerText = data.lastname || 'N/A';
-                document.getElementById('display_firstname').innerText = data.firstname || 'N/A';
-                document.getElementById('display_course').innerText = data.course || 'N/A';
-                document.getElementById('display_level').innerText = data.level || 'N/A';
-                const imageView = document.getElementById('display_image');
-                imageView.src = data.image || ''; // Set the image source
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching student data:', error);
-        });
-    }
+    fetch('/get_student_info', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ idno: idno }) // Sending the idno in the body
+    })
+    .then(response => {
+        if (response.status === 404) {
+            alert("Student not found. Please check the ID number.");
+            setTimeout(() => {
+                window.location.reload(); // Refresh the page after alert is closed
+            }, 500); // Slight delay to allow the alert to close
+        } else {
+            return response.json();
+        }
+    })
+    .then(data => {
+        if (data && !data.flash) {
+            document.getElementById('display_lastname').innerText = data.lastname || 'N/A';
+            document.getElementById('display_firstname').innerText = data.firstname || 'N/A';
+            document.getElementById('display_course').innerText = data.course || 'N/A';
+            document.getElementById('display_level').innerText = data.level || 'N/A';
+            const imageView = document.getElementById('display_image');
+            imageView.src = data.image || '';
+        }
+    })
+    .catch(error => {
+        console.error('Error fetching student data:', error);
+    });
+}
+
 </script>
+
 
 {% endblock %}
