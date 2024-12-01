@@ -97,10 +97,7 @@ def insert_attendance(student):
             INSERT INTO attendance (idno, firstname, lastname, course, level, time_attended)
             VALUES (?, ?, ?, ?, ?, ?)
         """
-        # Current timestamp for time_attended
         current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-
-        # Use postprocess to execute the query to insert the attendance data
         return postprocess(query, (student['idno'], student['firstname'], student['lastname'], student['course'], student['level'], current_time))
 
     except Exception as e:
