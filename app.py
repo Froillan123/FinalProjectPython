@@ -5,6 +5,8 @@ import qrcode
 import os
 import redis
 from flask_caching import Cache
+from datetime import datetime
+
 
 
 app = Flask(__name__)
@@ -81,14 +83,17 @@ def student_list():
         return redirect(url_for('login'))
 
 
+
 @app.route('/viewstudent')
 def viewstudent():
     if 'username' in session:
         pagetitle = "Attendance"
-        return render_template('viewattendance.html', data=getall_records('students'), pagetitle=pagetitle)
+        attendance_records = getall_records('attendance')  # Get all attendance records
+        return render_template('viewattendance.html', data=attendance_records, pagetitle=pagetitle)
     else:
         flash("Please log in first!", "warning")
         return redirect(url_for('login'))
+
 
 @app.route('/generate_qr', methods=['POST'])
 def generate_qr():
@@ -133,19 +138,14 @@ def get_student(idno):
 def get_student_info():
     data = request.get_json()
     idno = data.get('idno')
-
-    student = get_user(idno)  # Retrieve the student by IDNO using your database helper
-
+    student = get_user(idno)
     if isinstance(student, list):
-        student = student[0] if student else None  # If a list is returned, take the first item
+        student = student[0] if student else None
 
     if student:
-        # Define the image path for the student's image
+        insert_attendance(student)
         image_path = os.path.join('static', 'images', 'Register', f"{student['idno']}.png")
-        
-        # Check if the image exists in the filesystem
         if os.path.exists(image_path):
-            # If the image exists, use the image path
             student_info = {
                 'lastname': student['lastname'],
                 'firstname': student['firstname'],
@@ -154,22 +154,21 @@ def get_student_info():
                 'image': url_for('static', filename=f'images/Register/{student["idno"]}.png')
             }
         else:
-            # If the image does not exist, fall back to the default image
             student_info = {
                 'lastname': student['lastname'],
                 'firstname': student['firstname'],
                 'course': student['course'],
                 'level': student['level'],
-                'image': url_for('static', filename='images/default.png')  # Default image path
+                'image': url_for('static', filename='images/default.png')
             }
 
         return jsonify(student_info)
+
     else:
         flash('Student not found.', 'error')
         return jsonify({'flash': True}), 404
-
-
-
+    
+    
 @app.route('/edit_student', methods=['POST'])
 def edit_student():
     if 'username' in session:
@@ -178,13 +177,10 @@ def edit_student():
         firstname = request.form.get('firstname')
         course = request.form.get('course')
         level = request.form.get('level')
-
-        # Check if all required fields are filled
         if not all([idno, lastname, firstname, course, level]):
             flash('All fields are required.', 'error')
             return redirect(url_for('student_list'))
 
-        # Update the student record
         updated = update_record('students', idno=idno, lastname=lastname, firstname=firstname, course=course, level=level)
 
         if updated:

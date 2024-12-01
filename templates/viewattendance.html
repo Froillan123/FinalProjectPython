@@ -1,14 +1,42 @@
 {% extends 'base.html' %}
+
 {% block header %}
     {% include 'header.html' %}
 {% endblock %}
+
 {% block content %}
-<div id="timestamp"></div> 
+<div id="timestamp"></div>
 <div style="min-height: 100vh;">
-
-
-
+    <div class="details">
+        <div class="attendancecard">
+            <div class="cardHeader">
+                <h2>Attendance Records</h2>
+            </div>
+            <table class="attendanceTable">
+                <thead>
+                    <tr>
+                        <td>ID Number</td>
+                        <td>Lastname</td>
+                        <td>Firstname</td>
+                        <td>Course</td>
+                        <td>Level</td>
+                        <td>Time Attended</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for record in data %}
+                        <tr>
+                            <td>{{ record.idno }}</td>
+                            <td>{{ record.lastname }}</td>
+                            <td>{{ record.firstname }}</td>
+                            <td>{{ record.course }}</td>
+                            <td>{{ record.level }}</td>
+                            <td>{{ record.time_attended }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
-
-
 {% endblock %}

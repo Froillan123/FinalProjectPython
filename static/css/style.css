@@ -958,6 +958,89 @@ html::-webkit-scrollbar-thumb
 }
 
 
+.details {
+    position: relative;
+    width: 100%;
+    padding: 20px;
+}
+
+.details .attendancecard {
+    position: relative;
+    display: grid;
+    min-height: 500px;
+    background: var(--white);
+    padding: 20px;
+    box-shadow: 0 7px 25px rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+    overflow-x: auto; /* Allow horizontal scroll if needed */
+}
+
+.details .cardHeader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #2196F3;
+}
+
+.cardHeader h2 {
+    font-weight: 600;
+    color: var(--blue);
+}
+
+.details table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    table-layout: fixed; /* Ensures columns take up full width without overflow */
+}
+
+.details table thead td {
+    font-weight: 600;
+    background-color: var(--blue);
+    color: var(--white);
+    padding: 10px;
+    text-align: left;
+}
+
+.details .attendancecard table tr {
+    color: var(--black1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.details .attendancecard table tr:last-child {
+    border-bottom: none;
+}
+
+.details .attendancecard table tbody tr:hover {
+    background: var(--blue);
+    color: var(--white);
+}
+
+.details .attendancecard table tr td {
+    padding: 10px;
+}
+
+.details .attendancecard table tr td:last-child {
+    text-align: end;
+}
+
+.details .attendancecard table tr td:nth-child(2),
+.details .attendancecard table tr td:nth-child(3) {
+    text-align: left;
+}
+
+.details .attendancecard table tr td:nth-child(4),
+.details .attendancecard table tr td:nth-child(5),
+.details .attendancecard table tr td:nth-child(6) {
+    text-align: center;
+}
+
+
+  
+
+
+
+
 @media (max-width: 1402px) {
     #menu-icon {
         display: block;  
@@ -1065,7 +1148,26 @@ html::-webkit-scrollbar-thumb
     }
 }
 
+@media (max-width: 661px) {
+    .details {
+        padding: 10px; /* Reduce padding for smaller screens */
+    }
 
+    .details .attendancecard {
+        padding: 10px; /* Adjust padding inside the card */
+    }
+
+    .details table {
+        width: 100%;
+        overflow-x: auto; /* Ensure horizontal scroll if needed */
+        display: block; /* Make table scrollable */
+        white-space: nowrap; /* Prevent content from breaking to the next line */
+    }
+
+    .details .attendancecard table tr td {
+        word-wrap: break-word; /* Break long words to fit inside the cell */
+    }
+}
 
 @media (max-width: 594px)
 {

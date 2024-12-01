@@ -1,6 +1,6 @@
 #dbhelper.py
 from sqlite3 import connect, Row
-
+from datetime import datetime
 database:str = 'studentinfo.db'
 
 def postprocess(sql: str, params=()) -> bool:
@@ -87,3 +87,24 @@ def get_student_by_id(idno: str) -> dict:
     sql = 'SELECT * FROM students WHERE idno = ?'
     student = getprocess(sql, (idno,))
     return student[0] if student else None
+
+
+def insert_attendance(student):
+    # Insert student attendance record into the database
+    try:
+        # Assuming you are using a cursor or raw SQL queries
+        query = """
+            INSERT INTO attendance (idno, firstname, lastname, course, level, time_attended)
+            VALUES (?, ?, ?, ?, ?, ?)
+        """
+        # Current timestamp for time_attended
+        current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+        # Use postprocess to execute the query to insert the attendance data
+        return postprocess(query, (student['idno'], student['firstname'], student['lastname'], student['course'], student['level'], current_time))
+
+    except Exception as e:
+        print(f"Error inserting attendance: {e}")
+        # Handle errors if any occur while inserting attendance
+        return False
+
